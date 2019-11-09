@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="./web.css?v=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+    <!-- Jquery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body class="page_login">
+
+    <div class="wrapper">
+        <div class="container">
+            <div id="jsForm" class="login-form">
+                <div class="container">
+                    <h3 class="form-title">JS FORM</h3>
+                    <form id="jsForm" class="form" action="" onsubmit="return validateForm()" method="post">
+                        <span class="text-field">帳號: <input type="text" name="account"></span>
+                        <span class="text-field">密碼: <input type="password" name="password"></span>
+                        <button type="submit">LOGIN</button>
+                    </form>
+                </div>
+            </div>
+            <div id="jsForm-logout" style="display:none;">
+                <a href="./login.html">
+                    <button type="submit">LOGOUT</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function validateForm() {
+            
+            var jsForm = document.forms["jsForm"];
+            var account = jsForm.account.value;
+            var password = jsForm.password.value;
+
+            if(account == "root" && password == "password") {
+                alert("登入成功");
+                // document.getElementById("jsForm").style.display="none"
+                $('#jsForm').hide();
+                // document.getElementById("jsForm-logout").style.display="block"
+                $('#jsForm-logout').show();
+                return false;
+            }
+            else {
+                alert("登入失敗");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
