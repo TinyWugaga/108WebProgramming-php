@@ -21,7 +21,7 @@ $usersTitle = fetchAllUsersField($conn);
 $usersList = findUserLikeSearch($conn, $search, $field, $sort);
 
 $edit = $_GET["edit"] ?? '0' ;
-$msg = $_GET["msg"]  ?? '' ;
+$result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修改資料失敗' : '';
 
 ?>
 
@@ -72,7 +72,7 @@ $msg = $_GET["msg"]  ?? '' ;
 
         <div class="content">
             <!-- EDIT BOARD -->
-            <?php if($edit) { ?>
+            <?php if(isset($_GET["edit"])) { ?>
             <div class="class__edit">
                 <div class="class__board">
                     <div class="class__board_inner">
@@ -80,10 +80,11 @@ $msg = $_GET["msg"]  ?? '' ;
                             <h1 class="class__board_title">Edit</h1>
                         </div>
     
-                        <p class="class__board_notice"> <?= $msg ?></p>
+                        <p class="class__board_notice"> <?= $result ?></p>
     
                         <div class="class__board_block">
-                            <form class="class__form" name="loginForm" action="edit_process.php" method="post">
+                            <form class="class__form" name="updateForm" action="edit_process.php" method="post">
+                                <input type="hidden" name="id" value=<?= $usersList[$edit]->id ?> >
                                 <div class="class__form_textField">
                                     <label class="form__textField_label">帳號</label>
                                     <input type="text" name="account" placeholder="修改帳號" value=<?= $usersList[$edit]->account ?> required autocapitalize="off" autocorrect="off" spellcheck="false">
@@ -134,14 +135,14 @@ $msg = $_GET["msg"]  ?? '' ;
                                     </td>
                                 <?php } ?>
                                 <td class="class__table_cell class__table_cell--body table__cell--icon">
-                                    <a class="class__table_form" href="usersTable.php?edit=<?= $key?>">
+                                    <a class="table__cell_button" href="usersTable.php?edit=<?= $key?>">
                                         <input type="button">
                                         <i class="material-icons">edit</i>
                                         </input>
                                     </a>
                                 </td>
                                 <td class="class__table_cell class__table_cell--body table__cell--icon">
-                                    <a class="class__table_form">
+                                    <a class="table__cell_button">
                                         <input type="button">
                                         <i class="material-icons icon-delete">delete</i>
                                         </input>
