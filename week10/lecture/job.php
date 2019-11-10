@@ -29,14 +29,12 @@ class Job {
 
    // 接收參數為$_POST，即 $arguments = [$_POST]
     if (sizeof(func_get_args())==1){
-
       $this->postid = isset($arguments[0]["postid"])? $arguments[0]["postid"] : 0;
-
+      //create a Job from $_POST
       $this->company = $arguments[0]["company"];
       $this->content = $arguments[0]["content"];
       $this->pdate = $arguments[0]["pdate"];
     }
-
   }
  
   /*將物件轉換成陣列*/

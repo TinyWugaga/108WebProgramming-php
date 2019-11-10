@@ -2,7 +2,7 @@
   $servername = "localhost";
   $dbname = "practice";
   $username = "root";
-  $password = "12345678";
+  $password = "root";
 
 
   try
@@ -13,9 +13,10 @@
     //PDO 設置屬性（這邊設定的是  錯誤報告, 拋出 exceptions 異常）
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    echo "Connected successfully"; //PDO 連接成功印出訊息
+    //PDO 連接成功印出訊息
+    echo "Connected successfully"; 
   }
-  catch(PDOException $e)
-  {//接取 PDO 拋出錯誤
+  catch(PDOException $e)//接取 PDO 拋出錯誤
+  {
     echo "Connection failed: " . $e->getMessage(); //PDO 連接失敗印出訊息，並拋出錯誤內容
   }
