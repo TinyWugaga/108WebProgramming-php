@@ -98,8 +98,9 @@ function createUser($conn, $data = [])
         'password'   => $data[''],
         'name'       => $data[''],
         'created_at' => $data['created_at'] ?? date('Y-m-d'),
+        'updated_at' => $data['updated_at'] ?? null
     ];
-    //綁定新建欄位(:role, :account, :password ,:name ,:created_at) 變數
+    //綁定新建欄位(:role, :account, :password ,:name ,:created_at ,:updated_at) 變數
 
     /* PDO->execute()會回傳操作結果 */
     
