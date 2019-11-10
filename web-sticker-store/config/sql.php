@@ -95,7 +95,7 @@ function createUser($conn, $data = [])
         'password'   => $data['password'],
         'name'       => $data['name'],
         'created_at' => $data['created_at'] ?? date('Y-m-d'),
-        'updated_at' => $data['updated_at'] ?? '',
+        'updated_at' => $data['updated_at'] ?? null,
     ]);
 }
 
