@@ -3,7 +3,7 @@
 require __DIR__ . '/etc/bootstrap.php';
 
 //非管理者則跳回貼圖商店
-if (!isset($_SESSION["authority"])) {
+if (null/*HW--> 完成驗證登入身份別是否為管理者 HW*/) {
     header("Location:stickerPage.php");
     die;
 }

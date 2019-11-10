@@ -47,19 +47,23 @@ $authority = $_SESSION["authority"] ?? "C";
                 </form>
             </div>
             <ul class="header__util">
-            <?php if ($account) { ?>
+            <!-- HW 驗證登入 並顯示帳號 -->
+            <?php if (null) { ?>
                 <li class="header__util_item wish-box">
                     <a><span>你好，<?= $name ?></span></a>
                     <span class="util__item_line">|</span>
                 </li>
             <?php }?>
-            <?php if ($authority == 'M') { ?>
+            <!-- 驗證登入 並顯示帳號 HW-->
+            <!-- HW 驗證登入帳號是否為管理者 -->
+            <?php if (null) { ?>
                 <li class="header__util_item">
                     <a href="usersTable.php">
                         <span>管理註冊清單</span>
                     </a>
                     <span class="util__item_line">|</span>
                 </li>
+            <!-- 驗證登入帳號是否為使用者 HW -->
             <?php } else { ?>
                 <li class="header__util_item wish-box">
                     <a href="#">
@@ -71,7 +75,8 @@ $authority = $_SESSION["authority"] ?? "C";
                     <span class="util__item_line">|</span>
                 </li>
             <?php } ?>
-            <?php if ($account) { ?>
+            <!-- HW 驗證是否登入 顯示不同按鈕 -->
+            <?php if (null) { ?>
                 <li class="header__util_item login-button">
                     <a href="logout_process.php">登出</a>
                 </li>
@@ -80,6 +85,7 @@ $authority = $_SESSION["authority"] ?? "C";
                     <a href="login.php">登入</a>
                 </li>
             <?php } ?>
+            <!-- 驗證是否登入 顯示不同按鈕 HW -->
             </ul>
         </header>
 
@@ -237,7 +243,7 @@ $authority = $_SESSION["authority"] ?? "C";
                                     <div class="noteList__item">
                                         <div class="noteList__item_detailList">
                                             <p class="noteList__item_detail">
-                                                ．<span>登入及登出案件顯示，隨登入狀態改變。</span>
+                                                ．<span>登入及登出按鍵顯示，隨登入狀態改變。</span>
                                             </p>
                                             <p class="noteList__item_detail">
                                                 ．<span>登入顯示使用者名稱。</span>
