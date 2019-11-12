@@ -20,7 +20,9 @@ $field = $_GET["field"] ?? "account";
 $usersTitle = fetchAllUsersField($conn);
 $usersList = findUserLikeSearch($conn, $search, $field, $sort);
 
-$edit = $_GET["edit"] ?? '0' ;
+//獲取要修改的使用者資料
+$editId = $_GET["edit"] ?? '0' ;
+$editUser = findUserById($conn, $editId);
 $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修改資料失敗' : '';
 
 ?>
@@ -72,7 +74,7 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
 
         <div class="content">
             <!-- EDIT BOARD -->
-            <?php if(isset($_GET["edit"])) { ?>
+            <?php if($editId) { ?>
             <div class="class__edit">
                 <div class="class__board">
                     <div class="class__board_inner">
@@ -84,18 +86,19 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
     
                         <div class="class__board_block">
                             <form class="class__form" name="updateForm" action="edit_process.php" method="post">
-                                <input type="hidden" name="id" value=<?= $usersList[$edit]->id ?> >
+                                <input type="hidden" name="id" value=<?= $editUser['id'] ?> >
                                 <div class="class__form_textField">
                                     <label class="form__textField_label">帳號</label>
-                                    <input type="text" name="account" placeholder="修改帳號" value=<?= $usersList[$edit]->account ?> required autocapitalize="off" autocorrect="off" spellcheck="false">
+                                    <input type="text" name="account" placeholder="修改帳號" value="<?= $editUser['account'] ?>" required autocapitalize="off" autocorrect="off" spellcheck="false">
                                 </div>
                                 <div class="class__form_textField">
                                     <label class="form__textField_label">密碼</label>
-                                    <input type="text" name="password" placeholder="修改密碼" value=<?= $usersList[$edit]->password ?> required>
+                                    <input type="text" name="password" placeholder="修改密碼" value="<?= $editUser['password'] ?>" required>
                                 </div>
                                 <div class="class__form_textField">
                                     <label class="form__textField_label">名稱</label>
-                                    <input type="text" name="name" placeholder="修改名稱" value=<?= $usersList[$edit]->name ?> required>
+                                    <input type="text" name="name" placeholder="修改名稱" value="<?= $editUser['name'] ?>" required>
+                                    <?= $$editUser['name']?>
                                 </div>
                                 <div class="class__form_btn">
                                     <button type="submit" class="btn submit__btn">修改</button>
@@ -127,7 +130,7 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
                     </thead>
 
                     <tbody class="class__table_content">
-                        <?php foreach ($usersList as $key => $user) { ?>
+                        <?php foreach ($usersList as $user) { ?>
                             <tr class="class__table_row class__table_row--body">
                                 <?php foreach ($usersTitle as $title) { ?>
                                     <td class="class__table_cell class__table_cell--body">
@@ -135,7 +138,7 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
                                     </td>
                                 <?php } ?>
                                 <td class="class__table_cell class__table_cell--body table__cell--icon">
-                                    <a class="table__cell_button" href="usersTable.php?edit=<?= $key?>">
+                                    <a class="table__cell_button" href="usersTable.php?edit=<?= $user->id ?>">
                                         <input type="button">
                                         <i class="material-icons">edit</i>
                                         </input>

@@ -25,9 +25,8 @@ if (!empty($_POST)) {
         'name' => $uName,
     ]);
 
-    $key = $uId -1;
     // 跳轉並將結果帶回修改頁面。
-    header("Location:usersTable.php?edit={$key}&result={$updateResult}");
+    header("Location:usersTable.php?edit={$uId}&result={$updateResult}");
     die();
 }
 

@@ -43,6 +43,21 @@ function fetchAllUser($conn)
 }
 
 /**
+ * 依照給予的ID，取得使用者
+ * 
+ * @param  PDO $conn       PDO實體
+ * @param  string $id      要搜尋的使用者ID
+ * @return array
+ */
+function findUserById($conn, $id)
+{
+    $stmt = $conn->prepare('SELECT * FROM `users` WHERE `id`=:id');
+    $stmt->execute(['id' => $id]);
+    
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
  * 依照給予的帳號，取得使用者
  * 
  * @param  PDO $conn       PDO實體
