@@ -22,7 +22,9 @@ function fetchAllUsersField($conn)
     $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     function fieldName($column) {
-        return $column['Field'];
+        if($column['Field'] != 'deleted_at'){
+            return $column['Field'];
+        }
     }
     
     return array_map('fieldName', $columns);
@@ -83,9 +85,16 @@ function findUserByAccount($conn, $account)
  */
 function findUserLikeSearch($conn, $search, $field, $sort)
 {
-    $stmt = $conn->prepare(
-        "SELECT * FROM `users` WHERE `{$field}` LIKE :search ORDER BY `{$sort}` ASC"
-    );
+
+    $sql = <<<HEREDOC
+    SELECT *
+    FROM `users`
+    WHERE `{$field}` LIKE :search 
+    AND `deleted_at` IS NULL
+    ORDER BY `{$sort}` ASC
+    HEREDOC;
+
+    $stmt = $conn->prepare($sql);
     $stmt->execute(['search' => "%{$search}%"]);
 
     return $stmt->fetchAll(PDO::FETCH_CLASS, 'Users');
@@ -101,7 +110,7 @@ function findUserLikeSearch($conn, $search, $field, $sort)
 function createUser($conn, $data = [])
 {
     $stmt = $conn->prepare(
-        'INSERT INTO `users` (`role`, `account`, `password`, `name`, `created_at`, `updated_at`) VALUES (:role, :account, :password, :name, :created_at, :updated_at)'
+        'INSERT INTO `users` (`role`, `account`, `password`, `name`, `created_at`, `updated_at`, `deleted_at`) VALUES (:role, :account, :password, :name, :created_at, :updated_at, :deleted_at)'
     );
     
     return $stmt->execute([
@@ -111,6 +120,7 @@ function createUser($conn, $data = [])
         'name'       => $data['name'],
         'created_at' => $data['created_at'] ?? date('Y-m-d'),
         'updated_at' => $data['updated_at'] ?? null,
+        'deleted_at' => $data['deleted_at'] ?? null,
     ]);
 }
 
@@ -134,6 +144,22 @@ function updateUser($conn, $id, $data = [])
         'name'       => $data['name'],
         'updated_at' => $data['updated_at'] ?? date('Y-m-d H:i:s'),
     ]);
+
+}
+/**
+ * 軟刪除使用者資料
+ * 
+ * @param  PDO $conn     PDO實體
+ * @param  string $id    要刪除的使用者編號
+ * @return boolean       執行結果
+ */
+function deleteUser($conn, $id)
+{    
+    $stmt = $conn->prepare(
+        "UPDATE `users` SET `deleted_at`= CURRENT_TIME() WHERE `id`={$id}"
+    );
+    
+    return $stmt->execute();
 }
 
 // =============================================================================

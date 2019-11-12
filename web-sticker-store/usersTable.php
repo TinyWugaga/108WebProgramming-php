@@ -21,9 +21,16 @@ $usersTitle = fetchAllUsersField($conn);
 $usersList = findUserLikeSearch($conn, $search, $field, $sort);
 
 //獲取要修改的使用者資料
-$editId = $_GET["edit"] ?? '0' ;
+$editId = $_GET["edit"] ?? $_POST["edit"] ?? '0' ;
 $editUser = findUserById($conn, $editId);
-$result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修改資料失敗' : '';
+
+//獲取要刪除的使用者資料
+$deleteId = $_GET["delete"] ?? $_POST["delete"] ?? '0' ;
+
+//獲取process結果
+$result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
+
+
 
 ?>
 
@@ -75,14 +82,15 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
         <div class="content">
             <!-- EDIT BOARD -->
             <?php if($editId) { ?>
-            <div class="class__edit">
+            <div class="class__modal class__edit">
                 <div class="class__board">
                     <div class="class__board_inner">
                         <div class="class__board_logo">
                             <h1 class="class__board_title">Edit</h1>
                         </div>
-    
-                        <p class="class__board_notice"> <?= $result ?></p>
+                        <?php if($result){ ?>
+                        <p class="class__board_notice"> 修改資料<?= $result ?></p>
+                        <?php } ?>
     
                         <div class="class__board_block">
                             <form class="class__form" name="updateForm" action="edit_process.php" method="post">
@@ -98,7 +106,6 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
                                 <div class="class__form_textField">
                                     <label class="form__textField_label">名稱</label>
                                     <input type="text" name="name" placeholder="修改名稱" value="<?= $editUser['name'] ?>" required>
-                                    <?= $$editUser['name']?>
                                 </div>
                                 <div class="class__form_btn">
                                     <button type="submit" class="btn submit__btn">修改</button>
@@ -112,6 +119,41 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
                 </div>
             </div>
             <?php } ?>
+             <!-- DELETE BOARD -->
+            <?php if($deleteId) { ?>
+            <div class="class__modal class__delete">
+                <div class="class__board">
+                    <div class="class__board_inner">
+                        <div class="class__board_logo">
+                            <h1 class="class__board_title">Delete</h1>
+                        </div>
+                        <?php if($result){ ?>
+                        <p class="class__board_notice">刪除使用者<?= $result ?></p>
+                        <div class="class__board_block">
+                            <div class="class__form_btn">
+                                <button type="button" class="btn submit__btn">
+                                    <a href="usersTable.php">確認</a>
+                                </button>
+                            </div>
+                        </div>
+                        <?php }else{?>
+                        <p class="class__board_text">是否確定要刪除使用者？</p>
+                        <div class="class__board_block">
+                            <form class="class__form" name="deleteForm" action="delete_process.php" method="post">
+                                <input type="hidden" name="id" value=<?= $deleteId ?> >
+                                <div class="class__form_btn">
+                                    <button type="submit" class="btn submit__btn">確認</button>
+                                    <button type="button" class="btn cancel__btn">
+                                        <a href="usersTable.php">取消</a>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+            <?php } ?>
             <div class="class__paper">
                 <table class="class__table">
                     <thead class="class__table_head">
@@ -119,8 +161,9 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
                             <?php foreach ($usersTitle as $title) { ?>
                                 <th class="class__table_cell class__table_cell--head">
                                     <a class="icon table__cell_button" href="usersTable.php?sort=<?= $title ?>&search=<?= $search ?>&field=<?= $field ?>">
-                                        <?= $title ?>
+                                        <?php if($title) { echo $title ?>
                                         <i class="material-icons">expand_more</i>
+                                        <?php } ?>
                                     </a>
                                 </th>
                             <?php } ?>
@@ -138,18 +181,23 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '修改資料成功':'修�
                                     </td>
                                 <?php } ?>
                                 <td class="class__table_cell class__table_cell--body table__cell--icon">
-                                    <a class="table__cell_button" href="usersTable.php?edit=<?= $user->id ?>">
-                                        <input type="button">
-                                        <i class="material-icons">edit</i>
-                                        </input>
-                                    </a>
+                                 
+                                    <form action="usersTable.php" method="post">
+                                        <a class="table__cell_button">
+                                            <input type="submit" name="edit" value="<?= $user->id ?>">
+                                                <i class="material-icons">edit</i>
+                                            </input>
+                                        </a>
+                                    </form>
                                 </td>
                                 <td class="class__table_cell class__table_cell--body table__cell--icon">
-                                    <a class="table__cell_button">
-                                        <input type="button">
-                                        <i class="material-icons icon-delete">delete</i>
-                                        </input>
-                                    </a>
+                                    <form action="usersTable.php" method="post">
+                                        <a class="table__cell_button">
+                                            <input type="submit" name="delete" value="<?= $user->id ?>">
+                                                <i class="material-icons icon-delete">delete</i>
+                                            </input>
+                                        </a>
+                                    </form>
                                 </td>
                             </tr>
                         <?php } ?>

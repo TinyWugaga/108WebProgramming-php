@@ -161,9 +161,9 @@
 }
 
 /*=================================\
-|====         CLASS EDIT       ====|
+|====        CLASS MODAL       ====|
 \=================================*/
-.class__edit {
+.class__modal {
 
     position: fixed;
     left: 0;
@@ -179,28 +179,34 @@
     z-index: 2;
 }
 
-.class__edit .class__board {
+.class__modal .class__board {
 
     z-index: 10;
     background: #ffffff;
 }
 
-.class__edit .class__board_logo {
+.class__modal .class__board_logo {
 
     margin: 49px 0 20px 0;
 }
 
-.class__edit .class__board_notice {
+.class__modal .class__board_text {
+
+    margin: 40px 62px;
+    font-size: 18px;
+}
+
+.class__modal .class__board_notice {
 
     margin-top: 25px;
 }
 
-.class__edit .class__board_block {
+.class__modal .class__board_block {
 
     margin: 5px 0 50px;
 }
 
-.class__edit .form__textField_label {
+.class__modal .form__textField_label {
 
     display: inline-block;
     width: 60px;
@@ -209,8 +215,24 @@
     font-size: 16px;
 }
 
-.class__edit .class__form_textField>input {
+.class__modal .class__form_textField>input {
     font-size: 18px!important;
+}
+
+/*=================================\
+|====        CLASS EDIT        ====|
+\=================================*/
+
+.class__edit {
+
+}
+
+/*=================================\
+|====        CLASS DELETE      ====|
+\=================================*/
+
+.class__delete {
+
 }
 
 /*=================================\
