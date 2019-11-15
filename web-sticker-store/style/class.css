@@ -133,6 +133,15 @@
     width: 100%;
 }
 
+.remove__btn {
+
+    background: #454545;
+}
+
+.purchase__btn {
+    background: #00b84f;
+}
+
 .class__board_text {
 
     display: flex;

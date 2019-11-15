@@ -9,7 +9,7 @@ $uPassword = $_POST["password"] ?? "";
 $user = findUserByAccount($conn, $uAccount);
 
 //確認 User存在以及密碼符合該帳號
-if (isset($user) && $uPassword == $user["password"])
+if ($user && $uPassword == $user["password"])
 {
   $_SESSION["account"] = $uAccount;
   $_SESSION["name"] = $user["name"];

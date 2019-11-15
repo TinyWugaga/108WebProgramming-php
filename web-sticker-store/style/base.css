@@ -72,6 +72,25 @@ p {
     font-family: inherit;
 }
 
+.btn + .btn {
+    
+    margin-left: 4px;
+}
+
+.btn__inner {
+
+    display: table-cell;
+    vertical-align: middle;
+    height: 44px;
+}
+
+.btn__text {
+
+    min-width: 148px;
+    display: inline-block;
+    margin-top: 3px;
+}
+
 /*=================================\
 |====           HEADER         ====|
 \=================================*/
