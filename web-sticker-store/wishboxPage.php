@@ -2,19 +2,41 @@
 
 require __DIR__ . '/etc/bootstrap.php';
 
+//獲取登入資訊 未登入$user則為空值
+$user = $_SESSION['user'] ?? "";
+
+//未登入則跳回登入頁面
+if (!$user) {
+    header("Location:login.php");
+    die;
+}
+
+//非顧客則跳回貼圖商店
+if ($user['role'] != 'C') {
+    header("Location:stickerPage.php");
+    die;
+}
+
 //獲取所有貼圖清單
 $stickers = fetchAllStickers($conn);
-
-$list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
 //獲取當前選取貼圖編號 及設定預設值
 $stickerId = $_GET["sticker"] ?? "1";
 $selectedSticker = $stickers[($stickerId - 1)];
 
-//獲取登入資訊 帳號/名稱/身份:預設'顧客'
-$account = $_SESSION["account"] ?? "";
-$name = $_SESSION["name"] ?? "";
-$authority = $_SESSION["authority"] ?? "C";
+//獲取使用者資訊
+$account   = $user['account'] ?? '';
+$name      = $user['name'] ?? '';
+$authority = $user['role'] ?? '';
+$wish_list = $user['wish_list'] ?? '';
+
+//創建使用者願望清單列表
+$userWishList = [];
+
+foreach ($wish_list as $stickerId){
+    $sticker = findStickerById($conn, $stickerId);
+    array_push($userWishList, $sticker);
+}
 
 ?>
 
@@ -89,7 +111,7 @@ $authority = $_SESSION["authority"] ?? "C";
                     <h2 class="sidebar__title">貼圖選單</h2>
                     <ul class="sidebar__list">
                         <?php foreach ($stickers as $sticker) { ?>
-                            <li class="sidebar__list_item <?php echo ($sticker->id == $stickerId) ? "selected" : "" ?>">
+                            <li class="sidebar__list_item">
                                 <a href="stickerPage.php?sticker=<?= $sticker->id ?>">
                                     <?= $sticker->title ?>
                                 </a>
@@ -114,45 +136,45 @@ $authority = $_SESSION["authority"] ?? "C";
                         </nav>
 
                         <div class="section__wishbox section__wishbox_list--empty">
-                            <?php if($account) {?>
+                            <?php if(!$wish_list) {?>
                             <p class="section__wishbox_text">
                                 願望清單中沒有任何項目。
                                 到LINE STORE搜尋貼圖或主題，在喜歡的項目中點選<em>♡按鍵</em>，加到願望清單中吧！
                             </p>
-                            <?php } ?>
+                            <?php } else { ?>
                             <ul class="section__wishbox_list">
-                                <li class="wishbox__list_item">
-                                    <a class="list__item_close FnDeleteBtn" href="javascript:;">
-                                        <span class="MdBtnClose01"></span>
-                                    </a>
-                                    <a href="/stickershop/product/15622/zh-Hant" class="list__item_link">
-                                        <div class="list__item_img">
-                                            <img src="https://stickershop.line-scdn.net/stickershop/v1/product/15622/LINEStorePC/thumbnail_shop.png;compress=true">                                        
-                                        </div>
-                                        <div class="list__item_info">
-                                            <p class="list__info_name">謙謙創藝</p>
-                                            <h3 class="list__info_title">好想兔-小小淘氣</h3>
-                                            <p class="list__info_price">
-                                                <span class="list__info_priceText">NT$60</span>
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <div class="list__item_btn">
-                                        <a class="btn remove__btn">
-                                            <span class="btn__inner">
-                                                <span class="btn__text">
-                                                    取消收藏
-                                                </span>
-                                            </span>
-                                        </a>
-                                        <a class="btn submit__btn">
-                                            <span class="btn__inner">
-                                                <span class="btn__text">購買</span>
-                                            </span>
-                                        </a>
+                            <?php foreach ($userWishList as $wishSticker) { ?>
+                            <li class="wishbox__list_item">
+                                <a href="/stickershop/product/15622/zh-Hant" class="list__item_link">
+                                    <div class="list__item_img">
+                                        <img src="./img/sticker-<?= $wishSticker['id'] ?>/index.png" >                                        
                                     </div>
-                                </li>
+                                    <div class="list__item_info">
+                                        <p class="list__info_name"><?= $wishSticker['author'] ?></p>
+                                        <h3 class="list__info_title"><?= $wishSticker['title'] ?></h3>
+                                        <p class="list__info_price">
+                                            <span class="list__info_priceText">NT$<?= $wishSticker['price'] ?></span>
+                                        </p>
+                                    </div>
+                                </a>
+                                <div class="list__item_btn">
+                                    <a class="btn remove__btn">
+                                        <span class="btn__inner">
+                                            <span class="btn__text">
+                                                取消收藏
+                                            </span>
+                                        </span>
+                                    </a>
+                                    <a class="btn submit__btn">
+                                        <span class="btn__inner">
+                                            <span class="btn__text">購買</span>
+                                        </span>
+                                    </a>
+                                </div>
+                            </li>
+                            <?php } ?>
                             </ul>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="main__section--other">
@@ -183,36 +205,6 @@ $authority = $_SESSION["authority"] ?? "C";
         </div>
 
     </div>
-
-    <script>
-        $(document).ready(function() {
-
-            let clickSticker = false;
-            $('.sticker__li').click(function() {
-                clickSticker = true;
-                console.log(clickSticker);
-
-                $('.sticker__imgPreview').addClass('nonDisp');
-                $(this).find('.sticker__imgPreview').toggleClass('nonDisp');
-                if ($(this).find('.sticker__imgPreview').hasClass('nonDisp')) {
-                    $('.sticker__li_inner').css("opacity", "1");
-                    $(this).find('.sticker__li_inner').css("opacity", "1");
-                } else {
-                    $('.sticker__li_inner').css("opacity", "0.5");
-                    $(this).find('.sticker__li_inner').css("opacity", "0");
-                }
-            });
-            $('.main').click(function() {
-                if (!clickSticker) {
-                    console.log(clickSticker);
-                    $('.sticker__imgPreview').addClass('nonDisp');
-                    $('.sticker__li_inner').css("opacity", "1");
-                    $(this).find('.sticker__li_inner').css("opacity", "1");
-                }
-                clickSticker = false;
-            });
-        });
-    </script>
 </body>
 
 </html>

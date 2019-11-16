@@ -3,21 +3,30 @@
 require __DIR__ . '/etc/bootstrap.php';
 
 //非管理者則跳回貼圖商店
-if (!isset($_SESSION["authority"])) {
+$authority = $_SESSION['user']['role'] ?? "";
+if ( $authority != 'M') {
     header("Location:stickerPage.php");
     die;
 }
 
 //獲取管理者名稱
-$name = $_SESSION["name"] ?? "";
+$name = $_SESSION['user']['name'] ?? "";
 
 //檢查是否有排序及搜尋條件 
-$sort = $_GET["sort"] ?? "id";
+$sort   = $_GET["sort"] ?? "id";
 $search = $_GET["search"] ?? "";
-$field = $_GET["field"] ?? "account";
+$field  = $_GET["field"] ?? "account";
 
 //獲取使用者清單欄位名稱 及使用者清單
-$usersTitle = fetchAllUsersField($conn);
+$usersTitle = [
+    "id"         => "編號",
+    "role"       => "身份",
+    "account"    => "帳號",
+    "password"   => "密碼",
+    "name"       => "名稱",
+    "created_at" => "創建日期",
+    "updated_at" => "更新日期",
+];
 $usersList = findUserLikeSearch($conn, $search, $field, $sort);
 
 //獲取要修改的使用者資料
@@ -29,8 +38,6 @@ $deleteId = $_GET["delete"] ?? $_POST["delete"] ?? '0' ;
 
 //獲取process結果
 $result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
-
-
 
 ?>
 
@@ -95,9 +102,8 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
                         <div class="class__board_block">
                             <form class="class__form" name="updateForm" action="edit_process.php" method="post">
                                 <input type="hidden" name="id" value=<?= $editUser['id'] ?> >
-                                <div class="class__form_textField">
-                                    <label class="form__textField_label">帳號</label>
-                                    <input type="text" name="account" placeholder="修改帳號" value="<?= $editUser['account'] ?>" required autocapitalize="off" autocorrect="off" spellcheck="false">
+                                <div class="class__form_textField form__textField--disabled">
+                                    <label class="form__textField_label"><?= $editUser['account'] ?>  </label>
                                 </div>
                                 <div class="class__form_textField">
                                     <label class="form__textField_label">密碼</label>
@@ -154,16 +160,16 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
                 </div>
             </div>
             <?php } ?>
+             <!-- USER TABLE -->
             <div class="class__paper">
                 <table class="class__table">
                     <thead class="class__table_head">
                         <tr class="class__table_row">
-                            <?php foreach ($usersTitle as $title) { ?>
+                            <?php foreach ($usersTitle as $field => $title) { ?>
                                 <th class="class__table_cell class__table_cell--head">
                                     <a class="icon table__cell_button" href="usersTable.php?sort=<?= $title ?>&search=<?= $search ?>&field=<?= $field ?>">
-                                        <?php if($title) { echo $title ?>
+                                        <?= $title ?>
                                         <i class="material-icons">expand_more</i>
-                                        <?php } ?>
                                     </a>
                                 </th>
                             <?php } ?>
@@ -175,9 +181,9 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
                     <tbody class="class__table_content">
                         <?php foreach ($usersList as $user) { ?>
                             <tr class="class__table_row class__table_row--body">
-                                <?php foreach ($usersTitle as $title) { ?>
+                                <?php foreach ($usersTitle as $field => $title) { ?>
                                     <td class="class__table_cell class__table_cell--body">
-                                        <?= $user->$title ?>
+                                        <?= $user->$field ?>
                                     </td>
                                 <?php } ?>
                                 <td class="class__table_cell class__table_cell--body table__cell--icon">

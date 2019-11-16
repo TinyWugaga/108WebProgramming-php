@@ -4,17 +4,22 @@ require __DIR__ . '/etc/bootstrap.php';
 
 //獲取所有貼圖清單
 $stickers = fetchAllStickers($conn);
-
+//貼圖編號陣列
 $list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
 //獲取當前選取貼圖編號 及設定預設值
 $stickerId = $_GET["sticker"] ?? "1";
 $selectedSticker = $stickers[($stickerId - 1)];
 
-//獲取登入資訊 帳號/名稱/身份:預設'顧客'
-$account = $_SESSION["account"] ?? "";
-$name = $_SESSION["name"] ?? "";
-$authority = $_SESSION["authority"] ?? "C";
+//獲取登入資訊 未登入$user則為空值
+$user = $_SESSION["user"] ?? "";
+//如有登入資訊 獲取登入使用者 帳號/名稱/身份
+if ($user)
+{
+    $account   = $user['account'];
+    $name      = $user['name'];
+    $authority = $user['role'];
+}
 
 ?>
 
@@ -47,7 +52,7 @@ $authority = $_SESSION["authority"] ?? "C";
                 </form>
             </div>
             <ul class="header__util">
-            <?php if ($account) { ?>
+            <?php if ($user) { ?>
                 <li class="header__util_item wish-box">
                     <a><span>你好，<?= $name ?></span></a>
                     <span class="util__item_line">|</span>
@@ -62,7 +67,7 @@ $authority = $_SESSION["authority"] ?? "C";
                 </li>
             <?php } else { ?>
                 <li class="header__util_item wish-box">
-                    <a href="#">
+                    <a href="wishboxPage.php">
                         <span class="util__item_icon">
                             <i class="material-icons icon-wish">favorite_border</i>
                         </span>
@@ -71,7 +76,7 @@ $authority = $_SESSION["authority"] ?? "C";
                     <span class="util__item_line">|</span>
                 </li>
             <?php } ?>
-            <?php if ($account) { ?>
+            <?php if ($user) { ?>
                 <li class="header__util_item login-button">
                     <a href="logout_process.php">登出</a>
                 </li>

@@ -22,9 +22,7 @@ function fetchAllUsersField($conn)
     $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     function fieldName($column) {
-        if($column['Field'] != 'deleted_at'){
-            return $column['Field'];
-        }
+        return $column['Field'];
     }
     
     return array_map('fieldName', $columns);
@@ -71,7 +69,11 @@ function findUserByAccount($conn, $account)
     $stmt = $conn->prepare('SELECT * FROM `users` WHERE `account`=:account');
     $stmt->execute(['account' => $account]);
     
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    //轉換願望清單json格式
+    $user['wish_list'] = json_decode($user['wish_list'],JSON_UNESCAPED_UNICODE);
+
+    return $user;
 }
 
 /**
@@ -170,7 +172,7 @@ function deleteUser($conn, $id)
  * 取得所有貼圖
  * 
  * @param  PDO $conn    PDO實體
- * @return array
+ * @return object
  */
 function fetchAllStickers($conn)
 {
@@ -178,4 +180,20 @@ function fetchAllStickers($conn)
     $stmt->execute();
     
     return $stmt->fetchAll(PDO::FETCH_CLASS, 'Stickers');
+}
+
+/**
+ * 依照給予的id獲取貼圖資訊
+ * 
+ * @param  PDO $conn    PDO實體
+ * @param  string $id   要搜尋的貼圖ID
+ * 
+ * @return array
+ */
+function findStickerById($conn, $id)
+{
+    $stmt = $conn->prepare('SELECT * FROM `stickers` WHERE `id`=:id');
+    $stmt->execute([ 'id' => $id ]);
+    
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }

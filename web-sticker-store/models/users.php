@@ -11,11 +11,14 @@ class Users {
     if ($variable == "role")
     {
       $this->setRole($value);
+      return;
     }
-    else
+    if($variable == "wish_list")
     {
-      $this->$variable = $value;
+      $this->setWishList($value);
+      return;
     }
+    $this->$variable = $value;
   }
   
   function __get($variable){  
@@ -27,14 +30,17 @@ class Users {
   function __construct(){
 
     $arguments = func_get_args();
-    if (sizeof(func_get_args()) == 6){
+    if (sizeof(func_get_args()) == 9){
         
-      $this->id = $arguments["id"];
-      $this->role = setRole($arguments["role"]);
-      $this->account = $arguments["account"];
-      $this->password = $arguments["password"];
-      $this->name = $arguments["name"];
+      $this->id         = $arguments["id"];
+      $this->role       = setRole($arguments["role"]);
+      $this->account    = $arguments["account"];
+      $this->password   = $arguments["password"];
+      $this->name       = $arguments["name"];
+      $this->wish_list  = setWishList($arguments["wish_list"]);
       $this->created_at = $arguments["created_at"];
+      $this->updated_at = $arguments["updated_at"];
+      $this->deleted_at = $arguments["deleted_at"];
     }
   }
 
@@ -48,6 +54,11 @@ class Users {
     {
       $this->role =  '顧客';
     }
+  }
+
+  //將願望清單轉換成json格式
+  function setWishList($wishList) {
+    $this->wish_list = json_decode($wishList,JSON_UNESCAPED_UNICODE);
   }
    
 }

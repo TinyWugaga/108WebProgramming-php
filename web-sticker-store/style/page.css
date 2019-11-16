@@ -708,6 +708,10 @@
     flex: none;
 }
 
+.wishbox__list_item .list__item_img img {
+    width: 80px;
+}
+
 .wishbox__list_item .list__item_img::after {
     content: "";
     position: absolute;
@@ -731,6 +735,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 11px;
+    color: rgb(0, 0, 0);
 }
 .wishbox__list_item .list__item_info .list__info_title {
     min-width: 0;
