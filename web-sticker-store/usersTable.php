@@ -173,8 +173,8 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
                                     </a>
                                 </th>
                             <?php } ?>
-                            <th class="class__table_cell class__table_cell--head table__cell--icon">EDIT</th>
-                            <th class="class__table_cell class__table_cell--head table__cell--icon">DELETE</th>
+                            <th class="class__table_cell class__table_cell--head table__cell--icon">編輯</th>
+                            <th class="class__table_cell class__table_cell--head table__cell--icon">刪除</th>
                         </tr>
                     </thead>
 
