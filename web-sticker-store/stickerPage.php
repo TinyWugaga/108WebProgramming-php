@@ -2,6 +2,15 @@
 
 require __DIR__ . '/etc/bootstrap.php';
 
+//獲取登入資訊 未登入$user則為空值
+$user = findUserById($conn, $id = $_SESSION["userId"] ?? "");
+//如有登入資訊 獲取登入使用者 ID/帳號/名稱/身份/願望清單
+$userId    = $user["id"] ?? "";
+$account   = $user['account'] ?? "";
+$name      = $user['name'] ?? "";
+$authority = $user['role'] ?? "";
+$wish_list = $user['wish_list'] ?? [];
+
 //獲取所有貼圖清單
 $stickers = fetchAllStickers($conn);
 //貼圖編號陣列
@@ -11,15 +20,12 @@ $list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
 $stickerId = $_GET["sticker"] ?? "1";
 $selectedSticker = $stickers[($stickerId - 1)];
 
-//獲取登入資訊 未登入$user則為空值
-$user = $_SESSION["user"] ?? "";
-//如有登入資訊 獲取登入使用者 帳號/名稱/身份
-if ($user)
-{
-    $account   = $user['account'];
-    $name      = $user['name'];
-    $authority = $user['role'];
-}
+$inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
+
+
+//echo '<pre>';var_dump($user);
+//echo in_array($stickerId, $wish_list);
+//die();
 
 ?>
 
@@ -118,17 +124,19 @@ if ($user)
                                 </div>
                                 <a class="endTop__block_author"><?= $selectedSticker->author ?></a>
                                 <p class="endTop__block_text"><?= $selectedSticker->description ?></p>
-                                <div class="endTop__block_info">
+                                <form class="endTop__block_info" action="wishList_process.php" method="post">
                                     <p class="endTop__info_price">NT$<?= $selectedSticker->price ?></p>
                                     <p class="endTop__info_wish">
-                                        <label class="info__wish">
-                                            <input type="checkbox" name="" value="" class="mdIco01WishInp">
-                                            <span class="mdIco01WishTxt">
+                                        <a class="info__wish <?= $inWishList ?>">
+                                            <input type="hidden" name="userId" value="<?= $userId ?>">
+                                            <input type="hidden" name="stickerId" value="<?= $stickerId ?>">
+                                            <span class="info__wish_icon">
+                                                <input type="submit">
                                                 <i class="material-icons icon-wish">favorite</i>
                                             </span>
-                                        </label>
+                                        </a>
                                     </p>
-                                </div>
+                                </form>
                                 <ul class="endTop__block_button">
                                     <li>
                                         <button class="button--gift">贈送禮物</button>

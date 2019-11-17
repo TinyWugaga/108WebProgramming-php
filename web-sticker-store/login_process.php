@@ -11,7 +11,7 @@ $user = findUserByAccount($conn, $uAccount);
 //確認 $user非空值 以及密碼符合該帳號
 if ($user && $uPassword == $user["password"])
 {
-  $_SESSION["user"] = $user;
+  $_SESSION["userId"] = $user['id'];
 }
 else
 {

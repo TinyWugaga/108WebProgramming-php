@@ -210,19 +210,7 @@
     align-items: center;
 }
 
-.info__wish .icon-wish {
-
-    line-height: 1.6;
-    color: #adadad;
-}
-
-.info__wish input[type="checkbox"] {
-
-    display: none;
-}
-
-.info__wish input[type="checkbox"] + span {
-
+.info__wish_icon {
     display: inline-block;
     overflow: hidden;
     background-repeat: no-repeat;
@@ -233,6 +221,34 @@
     background-size: 37px auto;
     background-position: center center;
     border-radius: 50px;
+}
+
+.info__wish:active .info__wish_icon,
+.info__wish.selected .info__wish_icon
+{
+    background-color: #00b84f;
+}
+
+.info__wish .icon-wish {
+
+    line-height: 1.6;
+    color: #adadad;
+}
+
+.info__wish:active .icon-wish,
+.info__wish.selected .icon-wish
+{
+    color: #ffffff;
+}
+
+
+
+.info__wish input[type="submit"] {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
 }
 
 .endTop__block_button {

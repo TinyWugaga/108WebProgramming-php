@@ -3,37 +3,28 @@
 require __DIR__ . '/etc/bootstrap.php';
 
 //獲取登入資訊 未登入$user則為空值
-$user = $_SESSION['user'] ?? "";
+$user = findUserById($conn, $id = $_SESSION["userId"] ?? "");
+//如有登入資訊 獲取登入使用者 ID/帳號/名稱/身份
+$userId    = $user["id"] ?? "";
+$account   = $user['account'] ?? "";
+$name      = $user['name'] ?? "";
+$authority = $user['role'] ?? "";
+$wish_list = $user['wish_list'] ?? [];
 
 //未登入則跳回登入頁面
-if (!$user) {
+if (!$user) 
+{
     header("Location:login.php");
-    die;
-}
-
-//非顧客則跳回貼圖商店
-if ($user['role'] != 'C') {
-    header("Location:stickerPage.php");
     die;
 }
 
 //獲取所有貼圖清單
 $stickers = fetchAllStickers($conn);
 
-//獲取當前選取貼圖編號 及設定預設值
-$stickerId = $_GET["sticker"] ?? "1";
-$selectedSticker = $stickers[($stickerId - 1)];
-
-//獲取使用者資訊
-$account   = $user['account'] ?? '';
-$name      = $user['name'] ?? '';
-$authority = $user['role'] ?? '';
-$wish_list = $user['wish_list'] ?? '';
-
 //創建使用者願望清單列表
 $userWishList = [];
-
-foreach ($wish_list as $stickerId){
+foreach ($wish_list as $stickerId)
+{
     $sticker = findStickerById($conn, $stickerId);
     array_push($userWishList, $sticker);
 }
@@ -145,7 +136,7 @@ foreach ($wish_list as $stickerId){
                             <ul class="section__wishbox_list">
                             <?php foreach ($userWishList as $wishSticker) { ?>
                             <li class="wishbox__list_item">
-                                <a href="/stickershop/product/15622/zh-Hant" class="list__item_link">
+                                <a href="stickerPage.php?sticker=<?= $wishSticker['id'] ?>" class="list__item_link">
                                     <div class="list__item_img">
                                         <img src="./img/sticker-<?= $wishSticker['id'] ?>/index.png" >                                        
                                     </div>
@@ -184,7 +175,7 @@ foreach ($wish_list as $stickerId){
                                     <span class="profile__img--shadow"></span>
                                     <img src="https://profile.line-scdn.net/0hzOV0cbKyJWBrSQ479BxaN1cMKw0cZyMoEyY6UUcbLFNHeWEzXitsUxkeflETfjBkUSdtBE1ILgUW/large" width="100">
                                 </div>
-                                <h2 class="info__edit_id">Tiny踢妮✌</h2>
+                                <h2 class="info__edit_id"><?= $name ?></h2>
                             </div>
                             <div class="section__info_cash">
                                 <h3 class="info__cash_title">我的WEB點數</h3>

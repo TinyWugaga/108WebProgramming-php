@@ -2,22 +2,26 @@
 
 require __DIR__ . '/etc/bootstrap.php';
 
+//獲取登入資訊 未登入$user則為空值
+$user = findUserById($conn, $id = $_SESSION["userId"] ?? "");
+//如有登入資訊 獲取登入使用者 ID/帳號/名稱/身份
+$userId    = $user["id"] ?? "";
+$account   = $user['account'] ?? "";
+$name      = $user['name'] ?? "";
+$authority = $user['role'] ?? "";
+
 //非管理者則跳回貼圖商店
-$authority = $_SESSION['user']['role'] ?? "";
 if ( $authority != 'M') {
     header("Location:stickerPage.php");
     die;
 }
-
-//獲取管理者名稱
-$name = $_SESSION['user']['name'] ?? "";
 
 //檢查是否有排序及搜尋條件 
 $sort   = $_GET["sort"] ?? "id";
 $search = $_GET["search"] ?? "";
 $field  = $_GET["field"] ?? "account";
 
-//獲取使用者清單欄位名稱 及使用者清單
+//創建使用者清單欄位 及獲取使用者清單
 $usersTitle = [
     "id"         => "編號",
     "role"       => "身份",

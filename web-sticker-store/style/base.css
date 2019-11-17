@@ -360,7 +360,8 @@ p {
     color: #000;
 }
 
-.sidebar__list_item.selected a{
+.sidebar__list_item a:hover,
+.sidebar__list_item.selected a {
 
     color: #00b84f;
 }
