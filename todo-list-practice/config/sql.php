@@ -17,12 +17,12 @@ require __DIR__ . '/../models/students.php';
 function findStudentById($conn, $id)
 {
     
-    $sql = /*完成 sql*/ 'WHERE `id`= {$id} AND `deleted_at` IS NULL';
+    $sql = /*完成 sql*/ "WHERE `id`= {$id} AND `deleted_at` IS NULL";
     //prepare($sql = 從 `todo_list` 資料表獲取符合 學生編號 且 未刪除 的學生資料)
 
     //execute()
 
-    //return fetchAll(用陣列型態獲取的學生資料)
+    //return fetch(用陣列型態獲取的學生資料)
     return null;
 }
 //* ================================================ HW >
@@ -42,7 +42,7 @@ function findStudentByStudentId($conn, $studentId)
 
     //execute(綁定變數)
 
-    //return fetchAll(用陣列型態獲取的學生資料)
+    //return fetch(用陣列型態獲取的學生資料)
     return null;
 }
 //* ================================================ HW >
@@ -107,7 +107,7 @@ function createStudent($conn, $data = [])
  */
 function updateStudent($conn, $id, $data = [])
 {    
-    //prepare($sql = 修改 `todo_list` 欄位(`student_id`, `name`, `gender`) 且 `id`={$id} 的學生資料)
+    //prepare($sql = 修改 `todo_list` 欄位(`student_id`, `name`, `gender`, 'updated_at') 且 `id`={$id} 的學生資料)
 
     $updateStudent = [
         'student_id' => $data[''],

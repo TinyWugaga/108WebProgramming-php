@@ -15,8 +15,8 @@ require __DIR__ . '/../models/students.php';
  */
 function findStudentById($conn, $id)
 {
-    $stmt = $conn->prepare('SELECT * FROM `todo_list` WHERE `id`=:id AND `deleted_at` IS NULL');
-    $stmt->execute(['id' => $id]);
+    $stmt = $conn->prepare("SELECT * FROM `todo_list` WHERE `id`= {$id} AND `deleted_at` IS NULL");
+    $stmt->execute();
 
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -48,7 +48,7 @@ function findStudentByStudentId($conn, $studentId)
 function findStudentLikeSearch($conn, $search, $field, $sort)
 {
 
-    $sql = "SELECT * FROM `todo_list` WHERE `{$field}`  LIKE :search AND `deleted_at` IS NULL ORDER BY `{$sort}` ASC";
+    $sql = "SELECT * FROM `todo_list` WHERE `{$field}` LIKE :search AND `deleted_at` IS NULL ORDER BY `{$sort}` ASC";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute(['search' => "%{$search}%"]);

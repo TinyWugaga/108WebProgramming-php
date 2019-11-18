@@ -205,7 +205,7 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功' : '失敗' : '';
                         <tr class="class__table_row">
                             <?php foreach ($studentsTitle as $field => $title) { ?>
                                 <th class="class__table_cell class__table_cell--head">
-                                    <a class="icon table__cell_button" href="todoList.php?sort=<?= $title ?>&search=<?= $search ?>&field=<?= $field ?>">
+                                    <a class="icon table__cell_button" href="todoList.php?sort=<?= $field ?>&search=<?= $search ?>&field=<?= $field ?>">
                                         <?= $title ?>
                                         <i class="material-icons">expand_more</i>
                                     </a>

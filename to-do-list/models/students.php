@@ -13,7 +13,6 @@ class Students {
     if ($variable == "gender")
     {
       $this->setGender($value);
-      return;
     }
     
     $this->$variable = $value;
@@ -28,28 +27,43 @@ class Students {
   function __construct(){
 
     $arguments = func_get_args();
+
+    if (sizeof(func_get_args()) == 1){
+        
+      $data = $arguments[0];
+
+      $this->id         = $data["id"];
+      $this->student_id = $data["student_id"];
+      $this->name       = $data["name"];
+      $this->setGender($data["gender"]);
+      $this->created_at = $data["created_at"];
+      $this->updated_at = $data["updated_at"];
+      $this->deleted_at = $data["deleted_at"];
+    }
+
     if (sizeof(func_get_args()) == 7){
         
       $this->id         = $arguments["id"];
       $this->student_id = $arguments["student_id"];
       $this->name       = $arguments["name"];
-      $this->gender     = setGender($arguments["gender"]);
+      $this->setGender($arguments["gender"]);
       $this->created_at = $arguments["created_at"];
       $this->updated_at = $arguments["updated_at"];
       $this->deleted_at = $arguments["deleted_at"];
     }
+    //將身份代碼轉換為文字
   }
 
-  //將身份代碼轉換為文字
   function setGender($gender) {
-    if($gender == 'M')
-    {
-      $this->gender = '男生';
-    }
-    else
-    {
-      $this->gender = '女生';
-    }
+    
+      if($gender == 'M')
+      {
+        $this->gender = '男生';
+      }
+      else
+      {
+        $this->gender = '女生';
+      }
   }
 
 }
