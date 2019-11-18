@@ -2,65 +2,62 @@
 class Users {
    
   private $id;
+  private $role;
   private $account;
   private $password;
   private $name;
+  private $wish_list;
   private $created_at;
+  private $updated_at;
+  private $deleted_at;
 
   function __set($variable, $value){
     if ($variable == "role")
     {
-      $this->setRole($value);
+      $this->parseRole($value);
       return;
     }
     if($variable == "wish_list")
     {
-      $this->setWishList($value);
+      $this->convertWishList($value);
       return;
     }
     $this->$variable = $value;
   }
-  
-  function __get($variable){  
+
+  function __get($variable) {
     return $this->$variable;
   }
 
-  /* constructor */
+  /**
+   * 建構式
+   */
+  public function __construct(array $data = [])
+  {
+    $this->fill($data);
+    $this->role = $this->parseRole($this->role);
+    $this->wish_list = $this->parseRole($this->role);
+  }
 
-  function __construct(){
-
-    $arguments = func_get_args();
-    if (sizeof(func_get_args()) == 9){
-        
-      $this->id         = $arguments["id"];
-      $this->role       = setRole($arguments["role"]);
-      $this->account    = $arguments["account"];
-      $this->password   = $arguments["password"];
-      $this->name       = $arguments["name"];
-      $this->wish_list  = setWishList($arguments["wish_list"]);
-      $this->created_at = $arguments["created_at"];
-      $this->updated_at = $arguments["updated_at"];
-      $this->deleted_at = $arguments["deleted_at"];
+  protected function fill(array $data)
+  {
+    foreach ($data as $key => $value) {
+      if (property_exists($this, $key)) {
+        $this->{$key} = $value;
+      }
     }
   }
 
   //將身份代碼轉換為文字
-  function setRole($role) {
-    if($role == 'M')
-    {
-      $this->role = '管理者';
-    }
-    else
-    {
-      $this->role =  '顧客';
-    }
+  protected function parseRole($gender)
+  {
+    return ($gender == 'M') ? '管理者' : '顧客';
   }
 
   //將願望清單轉換成json格式
-  function setWishList($wishList) {
+  protected function convertWishList($wishList)
+  {
     $this->wish_list = json_decode($wishList,JSON_UNESCAPED_UNICODE);
   }
    
 }
-
-?>
