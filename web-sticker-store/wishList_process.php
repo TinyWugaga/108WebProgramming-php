@@ -22,20 +22,13 @@ if (!empty($_POST)) {
 
     if(in_array($stickerId,$wish_list))
     {
-       
-        $removedIndex = array_keys($wish_list, $stickerId)[0];
-
-        $wishList = array_merge(
-            array_slice($wish_list, 0, $removedIndex),
-            array_slice($wish_list, $removedIndex+1)
-        );
+        $wishList = array_diff($wish_list, [$stickerId]);
     }
     else
     {
-        $wishList = array_merge($wish_list, [$stickerId]);
+        $wishList[] = $stickerId;
     }
    
-    
     $updateResult = updateWishList($conn, $userId, $wishList);
 
     header("Location:stickerPage.php?sticker=$stickerId");
