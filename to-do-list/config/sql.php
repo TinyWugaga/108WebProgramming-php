@@ -1,84 +1,43 @@
 <?php
 
+require __DIR__ . '/../models/students.php';
+
 // =============================================================================
-// = Users
+// = Students
 // =============================================================================
 
 /**
- * 獲取所有欄位名稱
- * 
- * @param  PDO $conn     PDO實體
- * @param  array $data   要新增的使用者資料
- * @return boolean       執行結果
- */
-function fetchAllUsersField($conn)
-{
-    $stmt = $conn->prepare('SHOW COLUMNS FROM `users`');
-    $stmt->execute();
-
-    $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return array_map(function($column){
-        return $column['Field'];
-    }, $columns);
-}
-
-/**
- * 取得所有使用者
- * 
- * @param  PDO $conn    PDO實體
- * @return object
- */
-function fetchAllUser($conn)
-{
-    $stmt = $conn->prepare('SELECT * FROM `users`');
-    $stmt->execute();
-    
-    return $stmt->fetchAll(PDO::FETCH_CLASS, 'Users');
-}
-
-/**
- * 依照給予的ID，取得使用者
+ * 依照給予的ID，取得學生
  * 
  * @param  PDO $conn       PDO實體
- * @param  string $id      要搜尋的使用者ID
+ * @param  string $id      要搜尋的學生ID
  * @return array
  */
-function findUserById($conn, $id)
+function findStudentById($conn, $id)
 {
-    $stmt = $conn->prepare('SELECT * FROM `users` WHERE `id`=:id');
+    $stmt = $conn->prepare('SELECT * FROM `todo_list` WHERE `id`=:id AND `deleted_at` IS NULL');
     $stmt->execute(['id' => $id]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if($user) {//轉換願望清單json格式
-        $user['wish_list'] = json_decode($user['wish_list'],JSON_UNESCAPED_UNICODE);
-    }
-    return $user;
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 /**
- * 依照給予的帳號，取得使用者
+ * 依照給予的學號，取得學生
  * 
- * @param  PDO $conn       PDO實體
- * @param  string $account 要搜尋的使用者帳號
+ * @param  PDO $conn         PDO實體
+ * @param  string $studentId   要搜尋的學生學號
  * @return array
  */
-function findUserByAccount($conn, $account)
+function findStudentByStudentId($conn, $studentId)
 {
-    $stmt = $conn->prepare('SELECT * FROM `users` WHERE `account`=:account');
-    $stmt->execute(['account' => $account]);
-    
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if($user) {//轉換願望清單json格式
-        $user['wish_list'] = json_decode($user['wish_list'],JSON_UNESCAPED_UNICODE);
-    }
+    $stmt = $conn->prepare('SELECT * FROM `todo_list` WHERE `student_id`=:student_id AND `deleted_at` IS NULL');
+    $stmt->execute(['student_id' => $studentId]);
 
-    return $user;
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 /**
- * 依照給予的欄位與關鍵字，取得符合的使用者
+ * 依照給予的欄位與關鍵字，取得符合的學生
  * 
  * @param  PDO $conn       PDO實體
  * @param  string $search  要搜尋的關鍵字
@@ -86,41 +45,34 @@ function findUserByAccount($conn, $account)
  * @param  string $sort    要依此排序結果的欄位
  * @return object
  */
-function findUserLikeSearch($conn, $search, $field, $sort)
+function findStudentLikeSearch($conn, $search, $field, $sort)
 {
 
-    $sql = <<<HEREDOC
-    SELECT *
-    FROM `users`
-    WHERE `{$field}` LIKE :search 
-    AND `deleted_at` IS NULL
-    ORDER BY `{$sort}` ASC
-    HEREDOC;
+    $sql = "SELECT * FROM `todo_list` WHERE `{$field}`  LIKE :search AND `deleted_at` IS NULL ORDER BY `{$sort}` ASC";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute(['search' => "%{$search}%"]);
 
-    return $stmt->fetchAll(PDO::FETCH_CLASS, 'Users');
+    return $stmt->fetchAll(PDO::FETCH_CLASS, 'Students');
 }
 
 /**
- * 新增使用者
+ * 新增學生
  * 
  * @param  PDO $conn     PDO實體
- * @param  array $data   要新增的使用者資料
+ * @param  array $data   要新增的學生資料
  * @return boolean       執行結果
  */
-function createUser($conn, $data = [])
+function createStudent($conn, $data = [])
 {
     $stmt = $conn->prepare(
-        'INSERT INTO `users` (`role`, `account`, `password`, `name`, `created_at`, `updated_at`, `deleted_at`) VALUES (:role, :account, :password, :name, :created_at, :updated_at, :deleted_at)'
+        'INSERT INTO `todo_list` (`student_id`, `name`, `gender`, `created_at`, `updated_at`, `deleted_at`) VALUES (:student_id, :name, :gender, :created_at, :updated_at, :deleted_at)'
     );
     
     return $stmt->execute([
-        'role'       => $data['role'] ?? 'C',
-        'account'    => $data['account'],
-        'password'   => $data['password'],
+        'student_id' => $data['student_id'],
         'name'       => $data['name'],
+        'gender'     => $data['gender'],
         'created_at' => $data['created_at'] ?? date('Y-m-d'),
         'updated_at' => $data['updated_at'] ?? null,
         'deleted_at' => $data['deleted_at'] ?? null,
@@ -128,94 +80,40 @@ function createUser($conn, $data = [])
 }
 
 /**
- * 修改使用者資料
+ * 修改學生資料
  * 
  * @param  PDO $conn     PDO實體
- * @param  string $id    要修改的使用者編號
- * @param  array $data   要修改的使用者資料
+ * @param  string $id    要修改的學生編號
+ * @param  array $data   要修改的學生資料
  * @return boolean       執行結果
  */
-function updateUser($conn, $id, $data = [])
+function updateStudent($conn, $id, $data = [])
 {    
     $stmt = $conn->prepare(
-        "UPDATE `users` SET `account`=:account, `password`=:password, `name`=:name, `updated_at`=:updated_at WHERE `id`={$id}"
+        "UPDATE `todo_list` SET `student_id`=:student_id, `name`=:name, `gender`=:gender, `updated_at`=:updated_at WHERE `id`={$id}"
     );
     
     return $stmt->execute([
-        'account'    => $data['account'],
-        'password'   => $data['password'],
+        'student_id' => $data['student_id'],
         'name'       => $data['name'],
+        'gender'     => $data['gender'],
         'updated_at' => $data['updated_at'] ?? date('Y-m-d H:i:s'),
     ]);
 
 }
 
 /**
- * 更新使用者願望清單資料
+ * 軟刪除學生資料
  * 
  * @param  PDO $conn     PDO實體
- * @param  string $id    要更新清單的使用者編號
- * @param  array $data   更新後的願望清單資料
+ * @param  string $id    要刪除的學生編號
  * @return boolean       執行結果
  */
-function updateWishList($conn, $id, $list = [])
-{    
-    $wish_list = json_encode($list,JSON_UNESCAPED_UNICODE);
-
-    $stmt = $conn->prepare(
-        "UPDATE `users` SET `wish_list`=:wish_list, `updated_at`=CURRENT_TIME() WHERE `id`={$id}"
-    );
-    
-    return $stmt->execute(['wish_list' => $wish_list]);
-
-}
-
-/**
- * 軟刪除使用者資料
- * 
- * @param  PDO $conn     PDO實體
- * @param  string $id    要刪除的使用者編號
- * @return boolean       執行結果
- */
-function deleteUser($conn, $id)
+function deleteStudent($conn, $id)
 {    
     $stmt = $conn->prepare(
-        "UPDATE `users` SET `deleted_at`= CURRENT_TIME() WHERE `id`={$id}"
+        "UPDATE `todo_list` SET `deleted_at`= CURRENT_TIME() WHERE `id`={$id}"
     );
     
     return $stmt->execute();
-}
-
-// =============================================================================
-// = Stickers
-// =============================================================================
-
-/**
- * 取得所有貼圖
- * 
- * @param  PDO $conn    PDO實體
- * @return object
- */
-function fetchAllStickers($conn)
-{
-    $stmt = $conn->prepare('SELECT * FROM `stickers`');
-    $stmt->execute();
-    
-    return $stmt->fetchAll(PDO::FETCH_CLASS, 'Stickers');
-}
-
-/**
- * 依照給予的id獲取貼圖資訊
- * 
- * @param  PDO $conn    PDO實體
- * @param  string $id   要搜尋的貼圖ID
- * 
- * @return array
- */
-function findStickerById($conn, $id)
-{
-    $stmt = $conn->prepare('SELECT * FROM `stickers` WHERE `id`=:id');
-    $stmt->execute([ 'id' => $id ]);
-    
-    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
