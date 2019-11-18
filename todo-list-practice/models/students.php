@@ -1,6 +1,7 @@
 <?php
-class Students {
-   
+class Students
+{
+
   private $id;
   private $student_id;
   private $name;
@@ -9,47 +10,46 @@ class Students {
   private $updated_at;
   private $deleted_at;
 
-  function __set($variable, $value){
-    if ($variable == "gender")
-    {
+  function __set($variable, $value)
+  {
+    if ($variable == "gender") {
       $this->setGender($value);
-      return;
     }
-    
+
     $this->$variable = $value;
   }
-  
-  function __get($variable){  
+
+  function __get($variable)
+  {
     return $this->$variable;
   }
 
-  /* constructor */
+  /**
+   * 建構式
+   */
+  public function __construct(array $data = [])
+  {
+    $this->fill($data);
+    $this->gender = $this->parseGender($this->gender);
+  }
 
-  function __construct(){
-
-    $arguments = func_get_args();
-    if (sizeof(func_get_args()) == 7){
-        
-      $this->id         = $arguments["id"];
-      $this->student_id = $arguments["student_id"];
-      $this->name       = $arguments["name"];
-      $this->gender     = setGender($arguments["gender"]);
-      $this->created_at = $arguments["created_at"];
-      $this->updated_at = $arguments["updated_at"];
-      $this->deleted_at = $arguments["deleted_at"];
+  /**
+   * 填充屬性
+   */
+  protected function fill(array $data)
+  {
+    foreach ($data as $key => $value) {
+      if (property_exists($this, $key)) {
+        $this->{$key} = $value;
+      }
     }
   }
 
-  //將身份代碼轉換為文字
-  function setGender($gender) {
-    if($gender == 'M')
-    {
-      $this->gender = '男生';
-    }
-    else
-    {
-      $this->gender = '女生';
-    }
+  /**
+   * 處理性別
+   */
+  protected function parseGender($gender)
+  {
+    return ($gender == 'M') ? '男生' : '女生';
   }
-
 }
