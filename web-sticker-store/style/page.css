@@ -267,16 +267,18 @@
     margin: 0 0 0 4px;
 }
 
-.endTop__block_button button {
+.endTop__block_button .btn {
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    appearance: none;
+    cursor: pointer;
+
     width: 100%;
     height: 44px;
     box-sizing: border-box;
+    border-radius: 0;
     padding: 0 20px;
     color: #fff;
     font-size: 15px;
@@ -285,7 +287,8 @@
     text-decoration: none;
 }
 
-.button--gift {
+.button--gift,
+.button--removed {
 
     background-color: #454545;
 }
@@ -293,6 +296,12 @@
 .button--purchase {
 
     background-color: #00b84f;
+}
+
+.btn.button--purchased {
+
+    cursor: default;
+    background-color: #a9b2c2;
 }
 
 .section__line {
@@ -628,6 +637,7 @@
 
     float: left;
     margin-right: 20px;
+    cursor: pointer;
 }
 
 .tab__list_item a {
@@ -641,6 +651,7 @@
 .tab__list_item.selected {
 
     position: relative;
+    cursor: default;
 }
 
 
@@ -773,21 +784,31 @@
 }
 .wishbox__list_item .list__item_btn {
     font-size: 0;
-    display: block;
-    text-align: right;
-    flex: none;
+    display: flex;
 }
 .wishbox__list_item .list__item_btn .btn {
 
-    width: 148px;
-    border-radius: 0;
-    font-size: 15px;
-    color: #fff!important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     cursor: pointer;
-    display: inline-block;
-    box-sizing: border-box;
-    text-align: center;
+    width: 148px;
+    height: 44px;
+    border-radius: 0;
+    padding: 0 20px;
+    margin-left:4px;
+    
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 18px;
+    text-decoration: none;
+
+}
+
+.wishbox__list_item .list__item_btn .btn:nth-child(1) {
+    margin-lefr:0;
 }
 
 .section__info_edit {

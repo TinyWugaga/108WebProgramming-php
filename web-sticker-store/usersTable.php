@@ -85,7 +85,7 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
                     <span class="util__item_line">|</span>
                 </li>
                 <li class="header__util_item login-button">
-                    <a href="logout_process.php">登出</a>
+                    <a href="controllers/logout_process.php">登出</a>
                 </li>
             </ul>
         </header>
@@ -104,7 +104,7 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
                         <?php } ?>
     
                         <div class="class__board_block">
-                            <form class="class__form" name="updateForm" action="edit_process.php" method="post">
+                            <form class="class__form" name="updateForm" action="controllers/edit_process.php" method="post">
                                 <input type="hidden" name="id" value=<?= $editUser['id'] ?> >
                                 <div class="class__form_textField form__textField--disabled">
                                     <label class="form__textField_label"><?= $editUser['account'] ?>  </label>
@@ -149,7 +149,7 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功':'失敗' : '';
                         <?php }else{?>
                         <p class="class__board_text">是否確定要刪除使用者？</p>
                         <div class="class__board_block">
-                            <form class="class__form" name="deleteForm" action="delete_process.php" method="post">
+                            <form class="class__form" name="deleteForm" action="controllers/delete_process.php" method="post">
                                 <input type="hidden" name="id" value=<?= $deleteId ?> >
                                 <div class="class__form_btn">
                                     <button type="submit" class="btn submit__btn">確認</button>

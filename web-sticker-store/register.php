@@ -29,7 +29,7 @@ if(isset($_GET["result"])){
           <p class="class__board_notice"> <?= $msg ?></p>
 
           <div class="class__board_block">
-            <form class="class__form" name="loginForm" action="register_process.php" method="post">
+            <form class="class__form" name="loginForm" action="controllers/register_process.php" method="post">
               <div class="class__form_textField">
                 <label class="form__textField_label">帳號</label>
                 <input type="text" name="account" placeholder="請輸入註冊帳號" required autocapitalize="off" autocorrect="off" spellcheck="false">

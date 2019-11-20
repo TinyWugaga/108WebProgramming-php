@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/etc/bootstrap.php';
+require __DIR__ . '/../etc/bootstrap.php';
 
 //確認是否有修改表單資料
 if (!empty($_POST)) {
@@ -19,8 +19,8 @@ if (!empty($_POST)) {
     $deleteResult = deleteUser($conn, $uId);
 
     // 跳轉並將結果帶回修改頁面。
-    header("Location:usersTable.php?delete={$uId}&result={$deleteResult}");
+    header("Location:../usersTable.php?delete={$uId}&result={$deleteResult}");
     die();
 }
 
-header("Location:stickerPage.php");
+header("Location:../stickerPage.php");

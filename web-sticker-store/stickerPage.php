@@ -11,21 +11,27 @@ $name      = $user['name'] ?? "";
 $authority = $user['role'] ?? "";
 $wish_list = $user['wish_list'] ?? [];
 
+//檢查是否有搜尋條件 
+$search = $_GET["search"] ?? "";
+$field  = $_GET["field"] ?? "title";
+
 //獲取所有貼圖清單
-$stickers = fetchAllStickers($conn);
+$stickers = findStickerLikeSearch($conn, $search, $field);
 //貼圖編號陣列
 $list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
-//獲取當前選取貼圖編號 及設定預設值
-$stickerId = $_GET["sticker"] ?? "1";
-$selectedSticker = $stickers[($stickerId - 1)];
+//獲取當前預覽的貼圖編號 及當前貼圖資訊
+$stickerId = $_GET["sticker"] ?? $stickers[0]->id;
+$selectedSticker = findStickerById($conn, $stickerId);
 
+//當前貼圖是否在願望清單內
 $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
+//當前貼圖是否已購買$stickers
+$purchasedList = userPurchasedList($conn, $userId);
+$purchased = in_array($stickerId , $purchasedList);
 
-
-//echo '<pre>';var_dump($user);
-//echo in_array($stickerId, $wish_list);
-//die();
+$msg = $_GET['msg'] ?? '';
+$result = $_GET['result'] ?? '';
 
 ?>
 
@@ -41,12 +47,12 @@ $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
                 <a href="stickerPage.php"><span>WEB</span>STORE</a>
             </h1>
             <div class="header__search" data-widget="SearchBox">
-                <form action="stickerPage.php" method="POST">
+                <form action="stickerPage.php" method="GET">
                     <span class="header__search_block header__search_block--filter">
                         <i class="material-icons icon-filter">filter_list</i>
-                        <select class="search__filter_select" name="search-field">
-                            <option value="author">作者</option>
+                        <select class="search__filter_select" name="field">
                             <option value="title">名稱</option>
+                            <option value="author">作者</option>
                         </select>
                     </span>
                     <span class="header__search_block">
@@ -95,6 +101,25 @@ $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
         </header>
 
         <div class="content">
+        <?php if($msg) { ?>
+        <div class="class__modal class__edit">
+            <div class="class__board">
+                <div class="class__board_inner">
+                    <div class="class__board_logo">
+                        <h1 class="class__board_title">Delete</h1>
+                    </div>
+                    <p class="class__board_notice">刪除使用者<?= $result ?></p>
+                    <div class="class__board_block">
+                        <div class="class__form_btn">
+                            <button type="button" class="btn submit__btn">
+                                <a href="usersTable.php">確認</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
             <div class="sidebar">
                 <nav class="sidebar__nav" role="navigation">
                     <h2 class="sidebar__title">貼圖選單</h2>
@@ -120,12 +145,12 @@ $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
                             <ul class="endTop__block">
                                 <div class="endTop__block_head">
                                     <!-- STICKER TITLE -->
-                                    <p class="endTop__block_title"><?= $selectedSticker->title ?></p>
+                                    <p class="endTop__block_title"><?= $selectedSticker['title'] ?></p>
                                 </div>
-                                <a class="endTop__block_author"><?= $selectedSticker->author ?></a>
-                                <p class="endTop__block_text"><?= $selectedSticker->description ?></p>
-                                <form class="endTop__block_info" action="wishList_process.php" method="post">
-                                    <p class="endTop__info_price">NT$<?= $selectedSticker->price ?></p>
+                                <a class="endTop__block_author"><?= $selectedSticker['author'] ?></a>
+                                <p class="endTop__block_text"><?= $selectedSticker['description'] ?></p>
+                                <form class="endTop__block_info" action="controllers/wish_process.php" method="post">
+                                    <p class="endTop__info_price">NT$<?= $selectedSticker['price'] ?></p>
                                     <p class="endTop__info_wish">
                                         <a class="info__wish <?= $inWishList ?>">
                                             <input type="hidden" name="userId" value="<?= $userId ?>">
@@ -139,10 +164,18 @@ $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
                                 </form>
                                 <ul class="endTop__block_button">
                                     <li>
-                                        <button class="button--gift">贈送禮物</button>
+                                        <button class="btn button--gift">贈送禮物</button>
                                     </li>
                                     <li>
-                                        <button class="button--purchase">購買</button>
+                                        <?php if($purchased) { ?>
+                                            <button class="btn button--purchased">已購買</button>
+                                        <?php } else {?>
+                                        <form action="controllers/purchase_process.php" method="post">
+                                            <input type="hidden" name="userId" value="<?= $userId ?>">
+                                            <input type="hidden" name="stickerId" value="<?= $stickerId ?>">
+                                            <input type="submit" class="btn button--purchase" value="購買">
+                                        </form>
+                                        <?php }?>
                                     </li>
                                 </ul>
                             </ul>

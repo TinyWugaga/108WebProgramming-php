@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/etc/bootstrap.php';
+require __DIR__ . '/../etc/bootstrap.php';
 
 //確認是否有修改表單資料
 if (!empty($_POST)) {
@@ -13,7 +13,8 @@ if (!empty($_POST)) {
     $stickerId = $_POST["stickerId"] ?? "";
 
     $user = findUserById($conn, $userId);
-    $wish_list = $user['wish_list'] ? :[];
+    
+    $wish_list = $user['wish_list'] ? $user['wish_list']:[];
     
     /* =============================================================================
      * = 修改使用者資料
@@ -22,17 +23,17 @@ if (!empty($_POST)) {
 
     if(in_array($stickerId,$wish_list))
     {
-        $wishList = array_diff($wish_list, [$stickerId]);
+       $wishList = array_diff($wish_list, [$stickerId]);
     }
     else
     {
-        $wishList[] = $stickerId;
+        $wishList = array_merge($wish_list, [$stickerId]);
     }
    
     $updateResult = updateWishList($conn, $userId, $wishList);
 
-    header("Location:stickerPage.php?sticker=$stickerId");
+    header("Location:../stickerPage.php?sticker=$stickerId");
     die();
 }
 
-header("Location:stickerPage.php");
+header("Location:../stickerPage.php");

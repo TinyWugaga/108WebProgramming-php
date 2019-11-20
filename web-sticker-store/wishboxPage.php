@@ -21,13 +21,18 @@ if (!$user)
 //獲取所有貼圖清單
 $stickers = fetchAllStickers($conn);
 
-//創建使用者願望清單列表
+//創建使用者願望清單內的貼圖列表
 $userWishList = [];
+
 foreach ($wish_list as $stickerId)
 {
     $sticker = findStickerById($conn, $stickerId);
     array_push($userWishList, $sticker);
 }
+
+//當前貼圖是否已購買
+$purchasedList = userPurchasedList($conn, $userId);
+$purchased = in_array($stickerId , $purchasedList);
 
 ?>
 
@@ -46,7 +51,7 @@ foreach ($wish_list as $stickerId)
                 <form action="stickerPage.php" method="POST">
                     <span class="header__search_block header__search_block--filter">
                         <i class="material-icons icon-filter">filter_list</i>
-                        <select class="search__filter_select" name="search-field">
+                        <select class="search__filter_select" name="field">
                             <option value="author">作者</option>
                             <option value="title">名稱</option>
                         </select>
@@ -149,18 +154,21 @@ foreach ($wish_list as $stickerId)
                                     </div>
                                 </a>
                                 <div class="list__item_btn">
-                                    <a class="btn remove__btn">
-                                        <span class="btn__inner">
-                                            <span class="btn__text">
-                                                取消收藏
-                                            </span>
-                                        </span>
-                                    </a>
-                                    <a class="btn submit__btn">
-                                        <span class="btn__inner">
-                                            <span class="btn__text">購買</span>
-                                        </span>
-                                    </a>
+                                    <form action="controllers/wish_process.php" method="post">
+                                        <input type="hidden" name="userId" value="<?= $userId ?>">
+                                        <input type="hidden" name="stickerId" value="<?= $wishSticker['id'] ?>">
+
+                                        <input type="submit" class="btn button--removed" value="取消收藏">
+                                    </form>
+                                    <?php if($purchased) { ?>
+                                        <button class="btn button--purchased">已購買</button>
+                                    <?php } else {?>
+                                    <form action="controllers/purchase_process.php" method="post">
+                                        <input type="hidden" name="userId" value="<?= $userId ?>">
+                                        <input type="hidden" name="stickerId" value="<?= $wishSticker['id'] ?>">
+                                        <input type="submit" class="btn button--purchase" value="購買">
+                                    </form>
+                                    <?php }?>
                                 </div>
                             </li>
                             <?php } ?>
@@ -186,7 +194,7 @@ foreach ($wish_list as $stickerId)
                             </div>
                             <a class="section__info_btn">
                                 <span class="info__btn_inner">
-                                    <span class="info__btn_text">儲值點數</span>
+                                    <span class="info__btn_text user-credit">儲值點數</span>
                                 </span>
                             </a>
                         </div>
@@ -196,6 +204,14 @@ foreach ($wish_list as $stickerId)
         </div>
 
     </div>
+    <script>
+    $(document).ready(function() {
+
+        $('.user-credit').click(function() {
+            $('.user-credit').text("再不做作業啊");
+        });
+    });
+    </script>
 </body>
 
 </html>

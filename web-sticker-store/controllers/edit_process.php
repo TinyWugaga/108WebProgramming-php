@@ -1,44 +1,33 @@
 <?php
 
-require __DIR__ . '/etc/bootstrap.php';
+require __DIR__ . '/../etc/bootstrap.php';
 
-//register new User 
+//確認是否有修改表單資料
 if (!empty($_POST)) {
 
     // =============================================================================
     // = 處理送來的表單資料
     // =============================================================================
 
+    $uId = $_POST["id"] ?? "";
     $uAccount = $_POST["account"] ?? "";
     $uPassword = $_POST["password"] ?? "";
     $uName = $_POST["name"] ?? "";
 
     /* =============================================================================
-     * = 確認帳號是否存在
+     * = 修改使用者資料
      * =============================================================================
     **/
 
-    $user = findUserByAccount($conn, $uAccount);
-
-    if ($user) {
-        header("Location:register.php?msg=使用者已存在");
-        die;
-    }
-
-    /* =============================================================================
-     * = 新增使用者
-     * =============================================================================
-    **/
-
-    $addResult = createUser($conn, [
+    $updateResult = updateUser($conn, $uId, [
         'account' => $uAccount,
         'password' => $uPassword,
         'name' => $uName,
     ]);
 
-    // 跳轉並將結果帶回註冊頁面。
-    header("Location:register.php?result=" . $addResult);
+    // 跳轉並將結果帶回修改頁面。
+    header("Location:../usersTable.php?edit={$uId}&result={$updateResult}");
     die();
 }
 
-header("Location:stickerPage.php");
+header("Location:../stickerPage.php");

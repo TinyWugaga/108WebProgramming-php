@@ -30,7 +30,7 @@ $msg = isset($_GET["msg"]) ? "帳號密碼輸入錯誤" : "";
           <p class="class__board_notice"> <?= $msg ?></p>
 
           <div class="class__board_block">
-            <form class="class__form" name="loginForm" action="login_process.php" method="post">
+            <form class="class__form" name="loginForm" action="controllers/login_process.php" method="post">
               <div class="class__form_textField">
                 <label class="form__textField_label">帳號</label>
                 <input type="text" name="account" placeholder="帳號" required autocapitalize="off" autocorrect="off" spellcheck="false">

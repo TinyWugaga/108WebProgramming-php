@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/etc/bootstrap.php';
+require __DIR__ . '/../etc/bootstrap.php';
 
 $uAccount = $_POST["account"] ?? "";
 $uPassword = $_POST["password"] ?? "";
@@ -16,8 +16,8 @@ if ($user && $uPassword == $user["password"])
 else
 {
   $msg = 'failed';
-  header("Location:login.php?msg=" . $msg);
+  header("Location:../login.php?msg=" . $msg);
   die();
 }
 
-header("Location:stickerPage.php");
+header("Location:../stickerPage.php");
