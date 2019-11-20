@@ -27,8 +27,8 @@ $selectedSticker = findStickerById($conn, $stickerId);
 //當前貼圖是否在願望清單內
 $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
 //當前貼圖是否已購買$stickers
-$purchasedList = userPurchasedList($conn, $userId);
-$purchased = in_array($stickerId , $purchasedList);
+$purchasedStickers = userPurchasedList($conn, $userId);
+$purchased = in_array($stickerId , $purchasedStickers);
 
 $msg = $_GET['msg'] ?? '';
 $result = $_GET['result'] ?? '';
@@ -90,7 +90,7 @@ $result = $_GET['result'] ?? '';
             <?php } ?>
             <?php if ($user) { ?>
                 <li class="header__util_item login-button">
-                    <a href="logout_process.php">登出</a>
+                    <a href="controllers/logout_process.php">登出</a>
                 </li>
             <?php } else { ?>
                 <li class="header__util_item login-button">

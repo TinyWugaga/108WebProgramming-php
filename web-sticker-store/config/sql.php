@@ -274,11 +274,7 @@ function addPurchase($conn, $data = [])
  */
 function userPurchasedList($conn, $user_id)
 {
-    $sql = <<<HEREDOC
-    SELECT *
-    FROM `purchases`
-    WHERE `user_id` LIKE $user_id 
-    HEREDOC;
+    $sql = "SELECT * FROM `purchases` WHERE `user_id` = '$user_id'";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();

@@ -3,7 +3,10 @@
 require __DIR__ . '/../etc/bootstrap.php';
 
 //確認是否有修改表單資料
+
 if (!empty($_POST)) {
+
+    
 
     // =============================================================================
     // = 處理送來的表單資料
@@ -11,6 +14,12 @@ if (!empty($_POST)) {
 
     $userId = $_POST["userId"] ?? "";
     $stickerId = $_POST["stickerId"] ?? "";
+
+    //沒有登入資訊跳轉登入頁
+    if(!$userId){
+        header("Location:../login.php");
+        die;
+    }
 
     $user = findUserById($conn, $userId);
     

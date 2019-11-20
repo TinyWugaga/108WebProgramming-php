@@ -21,18 +21,16 @@ if (!$user)
 //獲取所有貼圖清單
 $stickers = fetchAllStickers($conn);
 
+//使用者已購買的貼圖清單
+$purchasedStickers = userPurchasedList($conn, $userId);
 //創建使用者願望清單內的貼圖列表
-$userWishList = [];
+$purchasedList = [];
 
-foreach ($wish_list as $stickerId)
+foreach ($purchasedStickers as $purchasedStickerId)
 {
-    $sticker = findStickerById($conn, $stickerId);
-    array_push($userWishList, $sticker);
+    $purchased = findStickerById($conn, $purchasedStickerId);
+    array_push($purchasedList, $purchased);
 }
-
-//當前貼圖是否已購買
-$purchasedList = userPurchasedList($conn, $userId);
-$purchased = in_array($stickerId , $purchasedList);
 
 ?>
 
@@ -122,11 +120,11 @@ $purchased = in_array($stickerId , $purchasedList);
                         <h2 class="section__text--hide">願望清單</h2>
                         <nav class="section__tab">
                             <ul class="section__tab_list">
-                                <li class="tab__list_item selected">
-                                    <a href="wishboxPage.php">願望清單</a>
-                                </li>
                                 <li class="tab__list_item">
-                                    <a href="userStickerPage.php">我的貼圖</a>
+                                    <a href="#">願望清單</a>
+                                </li>
+                                <li class="tab__list_item selected">
+                                    <a>我的貼圖</a>
                                 </li>
                             </ul>
                         </nav>
@@ -139,24 +137,24 @@ $purchased = in_array($stickerId , $purchasedList);
                             </p>
                             <?php } else { ?>
                             <ul class="section__wishbox_list">
-                            <?php foreach ($userWishList as $wishSticker) { ?>
+                            <?php foreach ($purchasedList as $purchasedSticker) { ?>
                             <li class="wishbox__list_item">
-                                <a href="stickerPage.php?sticker=<?= $wishSticker['id'] ?>" class="list__item_link">
+                                <a href="stickerPage.php?sticker=<?= $purchasedSticker['id'] ?>" class="list__item_link">
                                     <div class="list__item_img">
-                                        <img src="./img/sticker-<?= $wishSticker['id'] ?>/index.png" >                                        
+                                        <img src="./img/sticker-<?= $purchasedSticker['id'] ?>/index.png" >                                        
                                     </div>
                                     <div class="list__item_info">
-                                        <p class="list__info_name"><?= $wishSticker['author'] ?></p>
-                                        <h3 class="list__info_title"><?= $wishSticker['title'] ?></h3>
+                                        <p class="list__info_name"><?= $purchasedSticker['author'] ?></p>
+                                        <h3 class="list__info_title"><?= $purchasedSticker['title'] ?></h3>
                                         <p class="list__info_price">
-                                            <span class="list__info_priceText">NT$<?= $wishSticker['price'] ?></span>
+                                            <span class="list__info_priceText">NT$<?= $purchasedSticker['price'] ?></span>
                                         </p>
                                     </div>
                                 </a>
                                 <div class="list__item_btn">
                                     <form action="controllers/wish_process.php" method="post">
                                         <input type="hidden" name="userId" value="<?= $userId ?>">
-                                        <input type="hidden" name="stickerId" value="<?= $wishSticker['id'] ?>">
+                                        <input type="hidden" name="stickerId" value="<?= $purchasedSticker['id'] ?>">
 
                                         <input type="submit" class="btn button--removed" value="取消收藏">
                                     </form>
@@ -165,7 +163,7 @@ $purchased = in_array($stickerId , $purchasedList);
                                     <?php } else {?>
                                     <form action="controllers/purchase_process.php" method="post">
                                         <input type="hidden" name="userId" value="<?= $userId ?>">
-                                        <input type="hidden" name="stickerId" value="<?= $wishSticker['id'] ?>">
+                                        <input type="hidden" name="stickerId" value="<?= $purchasedSticker['id'] ?>">
                                         <input type="submit" class="btn button--purchase" value="購買">
                                     </form>
                                     <?php }?>

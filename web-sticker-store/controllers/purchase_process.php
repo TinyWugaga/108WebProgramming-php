@@ -11,6 +11,12 @@ if (!empty($_POST)) {
 
     $userId = $_POST["userId"] ?? "";
     $stickerId = $_POST["stickerId"] ?? "";
+
+    //沒有登入資訊跳轉登入頁
+    if(!$userId){
+        header("Location:../login.php");
+        die;
+    }
     
     /* =============================================================================
      * = 修改使用者資料
