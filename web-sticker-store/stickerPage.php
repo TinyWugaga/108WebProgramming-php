@@ -268,36 +268,20 @@ $result = $_GET['result'] ?? '';
                                     <div class="noteList__item">
                                         <div class="noteList__item_detailList">
                                             <p class="noteList__item_detail">
-                                                ．<span>除了預覽貼圖，目前其他功能未開放。</span>
-                                            </p>
-                                            <p class="noteList__item_detail">
                                                 ．<span>左側為貼圖清單，可選擇要預覽的貼圖特輯。</span>
                                             </p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="section__noteList_item">
-                                    <div class="noteList__item_text">
-                                        關於右上角功能列
-                                    </div>
-                                    <div class="noteList__item">
-                                        <div class="noteList__item_detailList">
                                             <p class="noteList__item_detail">
-                                                ．<span>登入及登出案件顯示，隨登入狀態改變。</span>
+                                                ．<span>上方搜尋欄可依名稱或作者搜尋貼圖。</span>
                                             </p>
                                             <p class="noteList__item_detail">
-                                                ．<span>登入顯示使用者名稱。</span>
+                                                ．<span>貼圖頁面可點擊愛心收藏至願望清單。</span>
                                             </p>
                                             <p class="noteList__item_detail">
-                                                ．<span>登入若為管理者顯示管理註冊清單。</span>
-                                            </p>
-                                            <p class="noteList__item_detail">
-                                                ．<span>登入若為一般顧客則顯示願望清單。</span>
+                                                ．<span>購買按鍵可購買貼圖並增加到個人貼圖列表。</span>
                                             </p>
                                         </div>
                                     </div>
                                 </li>
-
                             </ul>
                         </div>
                     </div>

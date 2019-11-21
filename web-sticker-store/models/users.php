@@ -7,6 +7,7 @@ class Users {
   private $password;
   private $name;
   private $wish_list;
+  private $purchase_list;
   private $created_at;
   private $updated_at;
   private $deleted_at;
@@ -20,6 +21,11 @@ class Users {
     if($variable == "wish_list")
     {
       $this->convertWishList($value);
+      return;
+    }
+    if($variable == "purchase_list")
+    {
+      $this->convertPurchaseList($value);
       return;
     }
     $this->$variable = $value;
@@ -36,7 +42,8 @@ class Users {
   {
     $this->fill($data);
     $this->role = $this->parseRole($this->role);
-    $this->wish_list = $this->parseRole($this->role);
+    $this->wish_list = $this->convertWishList($this->wish_list);
+    $this->purchase_list = $this->convertPurchaseList($this->purchase_list);
   }
 
   protected function fill(array $data)
@@ -58,6 +65,12 @@ class Users {
   protected function convertWishList($wishList)
   {
     $this->wish_list = json_decode($wishList,JSON_UNESCAPED_UNICODE);
+  }
+
+  //將購買列表轉換成json格式
+  protected function convertPurchaseList($purchaseList)
+  {
+    $this->purchase_list = json_decode($purchaseList,JSON_UNESCAPED_UNICODE);
   }
    
 }

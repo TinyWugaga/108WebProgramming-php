@@ -121,10 +121,10 @@ foreach ($purchasedStickers as $purchasedStickerId)
                         <nav class="section__tab">
                             <ul class="section__tab_list">
                                 <li class="tab__list_item">
-                                    <a href="#">願望清單</a>
+                                    <a href="wishboxPage.php">願望清單</a>
                                 </li>
                                 <li class="tab__list_item selected">
-                                    <a>我的貼圖</a>
+                                    <a href="userStickerPage.php">我的貼圖</a>
                                 </li>
                             </ul>
                         </nav>
@@ -151,23 +151,6 @@ foreach ($purchasedStickers as $purchasedStickerId)
                                         </p>
                                     </div>
                                 </a>
-                                <div class="list__item_btn">
-                                    <form action="controllers/wish_process.php" method="post">
-                                        <input type="hidden" name="userId" value="<?= $userId ?>">
-                                        <input type="hidden" name="stickerId" value="<?= $purchasedSticker['id'] ?>">
-
-                                        <input type="submit" class="btn button--removed" value="取消收藏">
-                                    </form>
-                                    <?php if($purchased) { ?>
-                                        <button class="btn button--purchased">已購買</button>
-                                    <?php } else {?>
-                                    <form action="controllers/purchase_process.php" method="post">
-                                        <input type="hidden" name="userId" value="<?= $userId ?>">
-                                        <input type="hidden" name="stickerId" value="<?= $purchasedSticker['id'] ?>">
-                                        <input type="submit" class="btn button--purchase" value="購買">
-                                    </form>
-                                    <?php }?>
-                                </div>
                             </li>
                             <?php } ?>
                             </ul>
@@ -179,7 +162,7 @@ foreach ($purchasedStickers as $purchasedStickerId)
                             <div class="section__info_edit">
                                 <div class="info__edit_profile">
                                     <span class="profile__img--shadow"></span>
-                                    <img src="https://profile.line-scdn.net/0hzOV0cbKyJWBrSQ479BxaN1cMKw0cZyMoEyY6UUcbLFNHeWEzXitsUxkeflETfjBkUSdtBE1ILgUW/large" width="100">
+                                    <img src="img/profile.jpg" width="100">
                                 </div>
                                 <h2 class="info__edit_id"><?= $name ?></h2>
                             </div>

@@ -181,7 +181,7 @@ $purchased = in_array($stickerId , $purchasedList);
                             <div class="section__info_edit">
                                 <div class="info__edit_profile">
                                     <span class="profile__img--shadow"></span>
-                                    <img src="https://profile.line-scdn.net/0hzOV0cbKyJWBrSQ479BxaN1cMKw0cZyMoEyY6UUcbLFNHeWEzXitsUxkeflETfjBkUSdtBE1ILgUW/large" width="100">
+                                    <img src="img/profile.jpg" width="100">
                                 </div>
                                 <h2 class="info__edit_id"><?= $name ?></h2>
                             </div>
