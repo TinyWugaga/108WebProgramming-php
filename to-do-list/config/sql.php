@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../models/students.php';
+require __DIR__ . '/../models/students.php';//載入物件模型（class）
 
 // =============================================================================
 // = Students
@@ -30,7 +30,8 @@ function findStudentById($conn, $id)
  */
 function findStudentByStudentId($conn, $studentId)
 {
-    $stmt = $conn->prepare('SELECT * FROM `todo_list` WHERE `student_id`=:student_id AND `deleted_at` IS NULL');
+    $stmt = $conn->prepare("SELECT * FROM `todo_list` WHERE `student_id`=:student_id AND `deleted_at` IS NULL");
+    //綁定變數 :student_id
     $stmt->execute(['student_id' => $studentId]);
 
     return $stmt->fetch(PDO::FETCH_ASSOC);

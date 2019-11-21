@@ -42,7 +42,7 @@ $result = isset($_GET["result"]) ? $_GET["result"] ? '成功' : '失敗' : '';
 
         <header class="header">
             <h1 class="header__logo">
-                <a href="stickerPage.php"><span>Todo</span>List</a>
+                <a href="todoList.php"><span>Todo</span>List</a>
             </h1>
             <div class="header__search" data-widget="SearchBox">
                 <form action="todoList.php" method="GET">
