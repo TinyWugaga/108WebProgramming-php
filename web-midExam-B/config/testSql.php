@@ -11,16 +11,16 @@
  * 
  * @param  PDO $conn     PDO實體
  * @param  string $id    要修改的使用者編號
- * @param  array $name   要修改的使用者姓名
+ * @param  array $seat   要修改的使用者機台
  * @return boolean       執行結果
  */
-function updateUserName($conn, $account, $name)
+function updateUserName($conn, $account, $seat)
 {    
     $stmt = $conn->prepare(
-        "UPDATE `users` SET `name`=:name, `updated_at`=CURRENT_TIME() WHERE `account`={$account}"
+        "UPDATE `users` SET `seat`=:seat, `updated_at`=CURRENT_TIME() WHERE `account`={$account}"
     );
     
-    return $stmt->execute(["name" => $name]);
+    return $stmt->execute(["seat" => $seat]);
 
 }
 
@@ -38,7 +38,7 @@ function updateUserName($conn, $account, $name)
  */
 function findStickerLikeSearch($conn, $search)
 {
-    $stmt = $conn->prepare("SELECT * FROM `stickers` WHERE `title` LIKE :search");
+    $stmt = $conn->prepare("SELECT * FROM `stickers` WHERE `author` LIKE :search");
     $stmt->execute(['search' => "%{$search}%"]);
 
     return $stmt->fetchAll(PDO::FETCH_CLASS, 'Stickers');
@@ -55,7 +55,7 @@ function findStickerLikeSearch($conn, $search)
  * @param  array $data   要新增的購買記錄資料
  * @return boolean       執行結果
  */
-function addWishList($conn, $data = [])
+function addWish($conn, $data = [])
 {
     $stmt = $conn->prepare(
         'INSERT INTO `wishes` (`user_id`, `sticker_id`, created_at) VALUES (:user_id, :sticker_id, :created_at)'
@@ -77,7 +77,7 @@ function addWishList($conn, $data = [])
  */
 function userWishList($conn, $user_id)
 {
-    $sql = "SELECT * FROM `wishes` WHERE `user_id` = '$user_id'";
+    $sql = "SELECT * FROM `wishes` WHERE `user_id` = '$user_id' AND `deleted_at` IS NULL";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();

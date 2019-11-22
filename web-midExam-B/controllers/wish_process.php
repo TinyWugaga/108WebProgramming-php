@@ -20,29 +20,37 @@ if (!empty($_POST)) {
         header("Location:../login.php");
         die;
     }
+    
+    //使用者已購買的貼圖清單
+    $wishedSticker = checkWish($conn, $userId, $stickerId);
+    $wishedId = $wishedSticker['id'];
+    $wishedDeleted = $wishedSticker['deleted_at'];
 
-    $user = findUserById($conn, $userId);
-    
-    $wish_list = $user['wish_list'] ? $user['wish_list']:[];
-    
     /* =============================================================================
-     * = 修改使用者資料
+     * = 修改願望清單
      * =============================================================================
     **/
-
-    if(in_array($stickerId,$wish_list))
+    if($wishedSticker)
     {
-       $wishList = array_diff($wish_list, [$stickerId]);
+        if($wishedDeleted)
+        {
+            $wishResult = readdWish($conn, $wishedId);
+        }
+        else
+        {
+            $wishResult = removeWish($conn, $wishedId);
+        }
     }
     else
     {
-        $wishList = array_merge($wish_list, [$stickerId]);
+        $wishResult = addWish($conn, [
+            "user_id" => $userId,
+            "sticker_id" => $stickerId,
+        ]);
     }
-   
-    $updateResult = updateWishList($conn, $userId, $wishList);
 
     header("Location:../stickerPage.php?sticker=$stickerId");
-    die();
+    die;
 }
 
 header("Location:../stickerPage.php");

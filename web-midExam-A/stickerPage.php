@@ -27,8 +27,8 @@ $selectedSticker = findStickerById($conn, $stickerId);
 $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
 
 //獲取使用者購買記錄 以及當前貼圖是否已購買
-$purchasedList = userPurchasedList($conn, $userId);
-$purchased = in_array($stickerId , $purchasedList);
+$purchase_list = userPurchasedList($conn, $userId);
+$purchased = in_array($stickerId , $purchase_list);
 
 $result = $_GET['result'] ?? '';
 

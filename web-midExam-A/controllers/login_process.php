@@ -9,7 +9,7 @@ $uName = $_POST["name"] ?? "";
 $user = findUserByAccount($conn, $uAccount);
 $addNameResult = updateUserName($conn, $uAccount, $uName);
 
-//確認 $user非空值 以及密碼符合該帳號
+//確認 $user非空值
 if ($user)
 {
   $_SESSION["userId"] = $user['id'];

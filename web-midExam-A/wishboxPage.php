@@ -22,16 +22,13 @@ if (!$user)
 $stickers = fetchAllStickers($conn);
 
 //創建使用者願望清單內的貼圖列表
-$userWishList = [];
+$userWishList = array_map(function($wishStickerId){
+    global $conn;
+    return findStickerById($conn, $wishStickerId);
+},$wish_list);
 
-foreach ($wish_list as $stickerId)
-{
-    $sticker = findStickerById($conn, $stickerId);
-    array_push($userWishList, $sticker);
-}
-
-//當前貼圖是否已購買
-$purchasedList = userPurchasedList($conn, $userId);
+//獲取使用者購買記錄
+$purchase_list = userPurchasedList($conn, $userId);
 
 ?>
 
@@ -47,7 +44,7 @@ $purchasedList = userPurchasedList($conn, $userId);
                 <a href="stickerPage.php"><span>WEB</span>STORE</a>
             </h1>
             <div class="header__search" data-widget="SearchBox">
-                <form action="stickerPage.php" method="POST">
+                <form action="stickerPage.php" method="GET">
                     <span class="header__search_block header__search_block--filter">
                         <i class="material-icons icon-filter">filter_list</i>
                         <select class="search__filter_select" name="field">
@@ -149,7 +146,7 @@ $purchasedList = userPurchasedList($conn, $userId);
 
                                         <input type="submit" class="btn button--removed" value="取消收藏">
                                     </form>
-                                    <?php if(in_array($wishSticker['id'] , $purchasedList)) { ?>
+                                    <?php if(in_array($wishSticker['id'] , $purchase_list)) { ?>
                                         <button class="btn button--purchased">已購買</button>
                                     <?php } else {?>
                                     <form action="controllers/purchase_process.php" method="post">
@@ -172,7 +169,7 @@ $purchasedList = userPurchasedList($conn, $userId);
                                     <span class="profile__img--shadow"></span>
                                     <img src="img/profile.jpg" width="100">
                                 </div>
-                                <h2 class="info__edit_id"><?= $name ?></h2>
+                                <h2 class="info__edit_id"><?= $account ?></h2>
                             </div>
                             <div class="section__info_cash">
                                 <h3 class="info__cash_title">我的WEB點數</h3>

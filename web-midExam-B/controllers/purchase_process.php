@@ -17,16 +17,17 @@ if (!empty($_POST)) {
         header("Location:../login.php");
         die;
     }
+
+    $user = findUserById($conn, $userId);
+    $purchase_list = $user['purchase_list'] ? $user['purchase_list']:[];
     
     /* =============================================================================
-     * = 修改使用者資料
+     * = 修改使用者購買記錄
      * =============================================================================
     **/
    
-    $purchaseResult = addPurchase($conn, [
-        "user_id" => $userId,
-        "sticker_id" => $stickerId,
-    ]);
+    $purchaseList = array_merge($purchase_list, [$stickerId]);
+    $updateResult = updatePurchaseList($conn, $userId, $purchaseList);
 
     header("Location:../stickerPage.php?sticker=$stickerId&purchase=$purchaseResult");
     die();

@@ -4,12 +4,12 @@ require __DIR__ . '/etc/bootstrap.php';
 
 //獲取登入資訊 未登入$user則為空值
 $user = findUserById($conn, $id = $_SESSION["userId"] ?? "");
-//如有登入資訊 獲取登入使用者 ID/帳號/名稱/身份/願望清單
+//如有登入資訊 獲取登入使用者 ID/帳號/名稱/身份/購買記錄
 $userId    = $user["id"] ?? "";
 $account   = $user['account'] ?? "";
-$name      = $user['name'] ?? "";
+$seat      = $user['seat'] ?? "";
 $authority = $user['role'] ?? "";
-$wish_list = $user['wish_list'] ?? [];
+$purchase_list = $user['purchase_list'] ?? [];
 
 //檢查是否有搜尋條件 
 $search = $_GET["search"] ?? "";
@@ -23,12 +23,13 @@ $list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
 //獲取當前預覽的貼圖編號 及當前貼圖資訊
 $stickerId = $_GET["sticker"] ?? $stickers[0]->id ?? '1';
 $selectedSticker = findStickerById($conn, $stickerId);
-//當前貼圖是否在願望清單內
+
+//獲取使用者願望清單 以及當前貼圖是否在願望清單內
+$wish_list = userWishList($conn, $userId);
 $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
 
-//獲取使用者購買記錄 以及當前貼圖是否已購買
-$purchasedList = userPurchasedList($conn, $userId);
-$purchased = in_array($stickerId , $purchasedList);
+//當前貼圖是否已購買
+$purchased = in_array($stickerId , $purchase_list);
 
 $result = $_GET['result'] ?? '';
 
@@ -50,7 +51,7 @@ $result = $_GET['result'] ?? '';
                     <span class="header__search_block header__search_block--filter">
                         <i class="material-icons icon-filter">filter_list</i>
                         <select class="search__filter_select" name="field">
-                            <option value="title">名稱</option>
+                            <option value="author">作者</option>
                         </select>
                     </span>
                     <span class="header__search_block">
@@ -64,7 +65,7 @@ $result = $_GET['result'] ?? '';
             <ul class="header__util">
             <?php if ($user) { ?>
                 <li class="header__util_item wish-box">
-                    <a><span>你好，<?= $name ?></span></a>
+                    <a><span>使用機台，<?= $seat ?></span></a>
                     <span class="util__item_line">|</span>
                 </li>
             <?php }?>

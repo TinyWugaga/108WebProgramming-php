@@ -117,3 +117,56 @@ function findStickerById($conn, $id)
     
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+// =============================================================================
+// = Wishes
+// =============================================================================
+
+/**
+ * 查詢願望清單是否存在 並回傳id
+ * 
+ * @param  PDO $conn     PDO實體
+ * @param  string $id    要查詢的購買記錄
+ * @return array       執行結果
+ */
+function checkWish($conn, $user_id, $sticker_id)
+{
+    $stmt = $conn->prepare(
+        "SELECT * FROM `wishes` WHERE `user_id`={$user_id} AND `sticker_id`={$sticker_id}"
+    );
+    $stmt->execute();
+    
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * 移除願望清單
+ * 
+ * @param  PDO $conn     PDO實體
+ * @param  string $id   要移除的購買記錄
+ * @return boolean       執行結果
+ */
+function removeWish($conn, $id)
+{
+    $stmt = $conn->prepare(
+        "UPDATE `wishes` SET `deleted_at`= CURRENT_TIME() WHERE `id`={$id}"
+    );
+    
+    return $stmt->execute();
+}
+
+/**
+ * 重新收藏願望清單
+ * 
+ * @param  PDO $conn     PDO實體
+ * @param  string $id    要重新收藏的購買記錄
+ * @return boolean       執行結果
+ */
+function readdWish($conn, $id)
+{
+    $stmt = $conn->prepare(
+        "UPDATE `wishes` SET `deleted_at`= NULL WHERE `id`={$id}"
+    );
+    
+    return $stmt->execute();
+}

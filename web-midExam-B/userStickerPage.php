@@ -7,9 +7,9 @@ $user = findUserById($conn, $id = $_SESSION["userId"] ?? "");
 //如有登入資訊 獲取登入使用者 ID/帳號/名稱/身份
 $userId    = $user["id"] ?? "";
 $account   = $user['account'] ?? "";
-$name      = $user['name'] ?? "";
+$seat      = $user['seat'] ?? "";
 $credit = $user['credit'] ?? "";
-$wish_list = $user['wish_list'] ?? [];
+$purchase_list = $user['purchase_list'] ?? [];
 
 //未登入則跳回登入頁面
 if (!$user) 
@@ -21,13 +21,11 @@ if (!$user)
 //獲取所有貼圖清單
 $stickers = fetchAllStickers($conn);
 
-//使用者已購買的貼圖清單
-$purchasedStickers = userPurchasedList($conn, $userId);
 //創建使用者願望清單內的貼圖列表
 $purchasedList = array_map(function($purchasedStickerId){
     global $conn;
     return findStickerById($conn, $purchasedStickerId);
-},$purchasedStickers);
+},$purchase_list);
 
 ?>
 
@@ -43,11 +41,11 @@ $purchasedList = array_map(function($purchasedStickerId){
                 <a href="stickerPage.php"><span>WEB</span>STORE</a>
             </h1>
             <div class="header__search" data-widget="SearchBox">
-                <form action="stickerPage.php" method="POST">
+                <form action="stickerPage.php" method="GET">
                     <span class="header__search_block header__search_block--filter">
                         <i class="material-icons icon-filter">filter_list</i>
                         <select class="search__filter_select" name="field">
-                            <option value="title">名稱</option>
+                            <option value="author">作者</option>
                         </select>
                     </span>
                     <span class="header__search_block">
@@ -61,7 +59,7 @@ $purchasedList = array_map(function($purchasedStickerId){
             <ul class="header__util">
                 <?php if ($account) { ?>
                     <li class="header__util_item wish-box">
-                        <a><span>你好，<?= $name ?></span></a>
+                        <a><span>使用機台，<?= $seat ?></span></a>
                         <span class="util__item_line">|</span>
                     </li>
                 <?php } ?>
@@ -117,10 +115,10 @@ $purchasedList = array_map(function($purchasedStickerId){
                         </nav>
 
                         <div class="section__wishbox section__wishbox_list--empty">
-                            <?php if(!$wish_list) {?>
+                            <?php if(!$purchase_list) {?>
                             <p class="section__wishbox_text">
-                                願望清單中沒有任何項目。
-                                到LINE STORE搜尋貼圖或主題，在喜歡的項目中點選<em>♡按鍵</em>，加到願望清單中吧！
+                                購買記錄中沒有任何項目。
+                                到LINE STORE搜尋貼圖或主題，在喜歡的項目中點選<em>♡購買</em>，獲取貼圖吧！
                             </p>
                             <?php } else { ?>
                             <ul class="section__wishbox_list">
@@ -151,7 +149,7 @@ $purchasedList = array_map(function($purchasedStickerId){
                                     <span class="profile__img--shadow"></span>
                                     <img src="img/profile.jpg" width="100">
                                 </div>
-                                <h2 class="info__edit_id"><?= $name ?></h2>
+                                <h2 class="info__edit_id"><?= $account ?></h2>
                             </div>
                             <div class="section__info_cash">
                                 <h3 class="info__cash_title">我的WEB點數</h3>
