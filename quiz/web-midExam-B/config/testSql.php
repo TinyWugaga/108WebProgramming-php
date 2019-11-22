@@ -1,6 +1,9 @@
 <?php
 
-//學號： 姓名： 機台：
+/**
+ * 請填寫自己的學號/姓名/使用機台
+ * 學號： 姓名： 機台：
+ */
 
 // =============================================================================
 // = Users
@@ -16,11 +19,13 @@
  */
 function updateUserName($conn, $account, $seat)
 {    
-    $stmt = $conn->prepare(
-        "UPDATE `users` SET `seat`=:seat, `updated_at`=CURRENT_TIME() WHERE `account`={$account}"
-    );
+    //$sql= 更新 `users`資料表 `seat`=使用者機台 `updated_at`=CURRENT_TIME() 欄位 在 `account` = 使用者帳號 的條件下
+    //prepare($sql);
+
+    //execute([綁定:seat]);
     
-    return $stmt->execute(["seat" => $seat]);
+    //回傳執行結果
+    return null;
 
 }
 
@@ -38,10 +43,14 @@ function updateUserName($conn, $account, $seat)
  */
 function findStickerLikeSearch($conn, $search)
 {
-    $stmt = $conn->prepare("SELECT * FROM `stickers` WHERE `author` LIKE :search");
-    $stmt->execute(['search' => "%{$search}%"]);
+    //$sql= 讀取 全部欄位 `stickers`資料表 `author`欄位 部分符合 $search關鍵字 的資料
+    //prepare($sql);
 
-    return $stmt->fetchAll(PDO::FETCH_CLASS, 'Stickers');
+    //execute([綁定:search]);
+    
+    //回傳 fetchAll -> 'Stickers' 物件型態資料
+
+    return null;
 }
 
 // =============================================================================
@@ -57,15 +66,19 @@ function findStickerLikeSearch($conn, $search)
  */
 function addWish($conn, $data = [])
 {
-    $stmt = $conn->prepare(
-        'INSERT INTO `wishes` (`user_id`, `sticker_id`, created_at) VALUES (:user_id, :sticker_id, :created_at)'
-    );
-    
-    return $stmt->execute([
-        'user_id'       => $data['user_id'],
-        'sticker_id'    => $data['sticker_id'],
+    //$sql= 新建 `wishes`資料表 (`user_id`, `sticker_id`, `created_at`)欄位 為$data 資料的願望清單
+    //prepare($sql);
+
+    $wishData = [
+        'user_id'       => $data[''], /**完成資料綁定 */
+        'sticker_id'    => $data[''], /**完成資料綁定 */
         'created_at' => $data['created_at'] ?? date('Y-m-d H:i:s'),
-    ]);
+    ];
+
+    //execute([綁定:user_id :sticker_id :created_at]);
+    
+    //回傳執行結果
+    return null;
 }
 
 /**
@@ -77,16 +90,18 @@ function addWish($conn, $data = [])
  */
 function userWishList($conn, $user_id)
 {
-    $sql = "SELECT * FROM `wishes` WHERE `user_id` = '$user_id' AND `deleted_at` IS NULL";
+    //$sql= 讀取 全部欄位 `wishes`資料表 `user_id`欄位 等於 使用者id 且 deleted_at` IS NULL 的資料
+    //prepare($sql);
 
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $recordList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //execute([綁定:user_id]);
 
-    //轉換購買記錄為貼圖清單
-    $userPurchase = array_map(function ($record){
+    $recordList = [];/**存取回傳資料 fetchAll -> 陣列型態資料 */
+
+    /**以下勿動 */
+    //轉換願望清單為貼圖id清單
+    $userWish = array_map(function ($record){
         return $record['sticker_id'];
     },$recordList);
 
-    return $userPurchase;
+    return $userWish;
 }
