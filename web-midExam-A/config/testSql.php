@@ -77,7 +77,7 @@ function addPurchase($conn, $data = [])
  */
 function userPurchasedList($conn, $user_id)
 {
-    $sql = "SELECT `sticker_id` FROM `purchases` WHERE `user_id` = '$user_id'";
+    $sql = "SELECT * FROM `purchases` WHERE `user_id` = '$user_id'";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();
