@@ -9,10 +9,10 @@
 /**
  * 修改使用者資料
  * 
- * @param  PDO $conn     PDO實體
- * @param  string $id    要修改的使用者編號
- * @param  array $seat   要修改的使用者機台
- * @return boolean       執行結果
+ * @param  PDO $conn         PDO實體
+ * @param  string $account   要修改的使用者帳號
+ * @param  array $seat       要修改的使用者機台
+ * @return boolean           執行結果
  */
 function updateUserName($conn, $account, $seat)
 {    
@@ -30,10 +30,10 @@ function updateUserName($conn, $account, $seat)
 
 
 /**
- * 依照給予的名稱關鍵字，取得符合的使用者
+ * 依照給予的作者關鍵字，取得符合的貼圖
  * 
  * @param  PDO $conn       PDO實體
- * @param  string $search  要搜尋的關鍵字
+ * @param  string $search  要搜尋的貼圖作者關鍵字
  * @return object
  */
 function findStickerLikeSearch($conn, $search)
@@ -52,7 +52,7 @@ function findStickerLikeSearch($conn, $search)
  * 新增願望清單
  * 
  * @param  PDO $conn     PDO實體
- * @param  array $data   要新增的購買記錄資料
+ * @param  array $data   要新增的願望清單資料
  * @return boolean       執行結果
  */
 function addWish($conn, $data = [])
@@ -69,10 +69,10 @@ function addWish($conn, $data = [])
 }
 
 /**
- * 依使用者id回傳已收藏的貼圖清單
+ * 依使用者id回傳願望清單
  * 
- * @param  PDO $conn     PDO實體
- * @param  string $id    要搜尋購買記錄的使用者
+ * @param  PDO $conn         PDO實體
+ * @param  string $user_id   要搜尋購買記錄的使用者id
  * @return array
  */
 function userWishList($conn, $user_id)

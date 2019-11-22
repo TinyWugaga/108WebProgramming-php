@@ -9,10 +9,10 @@
 /**
  * 修改使用者資料
  * 
- * @param  PDO $conn     PDO實體
- * @param  string $id    要修改的使用者編號
- * @param  array $name   要修改的使用者姓名
- * @return boolean       執行結果
+ * @param  PDO $conn         PDO實體
+ * @param  string $account   要修改的使用者帳號
+ * @param  array $name       要修改的使用者姓名
+ * @return boolean           執行結果
  */
 function updateUserName($conn, $account, $name)
 {    
@@ -30,10 +30,10 @@ function updateUserName($conn, $account, $name)
 
 
 /**
- * 依照給予的名稱關鍵字，取得符合的使用者
+ * 依照給予的名稱關鍵字，取得符合的貼圖
  * 
  * @param  PDO $conn       PDO實體
- * @param  string $search  要搜尋的關鍵字
+ * @param  string $search  要搜尋的貼圖名稱關鍵字
  * @return object
  */
 function findStickerLikeSearch($conn, $search)
@@ -71,8 +71,8 @@ function addPurchase($conn, $data = [])
 /**
  * 依使用者id回傳已購買的貼圖清單
  * 
- * @param  PDO $conn     PDO實體
- * @param  string $id    要搜尋購買記錄的使用者
+ * @param  PDO $conn         PDO實體
+ * @param  string $user_id   要搜尋購買記錄的使用者id
  * @return array
  */
 function userPurchasedList($conn, $user_id)
