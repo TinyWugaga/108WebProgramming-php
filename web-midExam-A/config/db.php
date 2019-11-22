@@ -1,6 +1,6 @@
 <?php
   $servername = "localhost";
-  $dbname = "practice";
+  $dbname = "web_mid_exam";
   $username = "web_class";
   $password = "2333";
   //echo "test";

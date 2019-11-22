@@ -6,6 +6,8 @@ class Users {
   private $account;
   private $password;
   private $name;
+  private $seat;
+  private $credit;
   private $wish_list;
   private $purchase_list;
   private $created_at;

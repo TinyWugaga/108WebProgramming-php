@@ -7,7 +7,7 @@ if (isset($_SESSION["account"])) {
 };
 
 //verified failed msg
-$msg = isset($_GET["msg"]) ? "帳號密碼輸入錯誤" : "";
+$msg = $_GET["msg"] ?? "";
 
 ?>
 
@@ -24,7 +24,7 @@ $msg = isset($_GET["msg"]) ? "帳號密碼輸入錯誤" : "";
       <div class="class__board">
         <div class="class__board_inner">
           <div class="class__board_logo">
-            <h1 class="class__board_title">WEB</h1>
+            <h1 class="class__board_title">WEB MID-EXAM ver.A</h1>
           </div>
 
           <p class="class__board_notice"> <?= $msg ?></p>
@@ -32,21 +32,17 @@ $msg = isset($_GET["msg"]) ? "帳號密碼輸入錯誤" : "";
           <div class="class__board_block">
             <form class="class__form" name="loginForm" action="controllers/login_process.php" method="post">
               <div class="class__form_textField">
-                <label class="form__textField_label">帳號</label>
-                <input type="text" name="account" placeholder="帳號" required autocapitalize="off" autocorrect="off" spellcheck="false">
+                <label class="form__textField_label">學號</label>
+                <input type="text" name="student_id" placeholder="學號" required autocapitalize="off" autocorrect="off" spellcheck="false">
               </div>
               <div class="class__form_textField">
-                <label class="form__textField_label">密碼</label>
-                <input type="password" name="password" placeholder="密碼" required>
+                <label class="form__textField_label">姓名</label>
+                <input type="text" name="name" placeholder="姓名" required>
               </div>
               <div class="class__form_btn">
-                <button type="submit" class="btn submit__btn">登入</button>
+                <button type="submit" class="btn submit__btn">開始作答</button>
               </div>
             </form>
-          </div>
-
-          <div class="class__board_text">
-            <a href="register.php" class="board__text_link">還沒有帳號？立即註冊</a>
           </div>
         </div>
 

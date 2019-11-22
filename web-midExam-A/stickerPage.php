@@ -16,21 +16,20 @@ $search = $_GET["search"] ?? "";
 $field  = $_GET["field"] ?? "title";
 
 //獲取所有貼圖清單
-$stickers = findStickerLikeSearch($conn, $search, $field);
+$stickers = findStickerLikeSearch($conn, $search);
 //貼圖編號陣列
 $list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
 //獲取當前預覽的貼圖編號 及當前貼圖資訊
-$stickerId = $_GET["sticker"] ?? $stickers[0]->id;
+$stickerId = $_GET["sticker"] ?? $stickers[0]->id ?? '1';
 $selectedSticker = findStickerById($conn, $stickerId);
-
 //當前貼圖是否在願望清單內
 $inWishList = in_array($stickerId, $wish_list) ? 'selected':'' ;
-//當前貼圖是否已購買$stickers
-$purchasedStickers = userPurchasedList($conn, $userId);
-$purchased = in_array($stickerId , $purchasedStickers);
 
-$msg = $_GET['msg'] ?? '';
+//獲取使用者購買記錄 以及當前貼圖是否已購買
+$purchasedList = userPurchasedList($conn, $userId);
+$purchased = in_array($stickerId , $purchasedList);
+
 $result = $_GET['result'] ?? '';
 
 ?>
@@ -52,7 +51,6 @@ $result = $_GET['result'] ?? '';
                         <i class="material-icons icon-filter">filter_list</i>
                         <select class="search__filter_select" name="field">
                             <option value="title">名稱</option>
-                            <option value="author">作者</option>
                         </select>
                     </span>
                     <span class="header__search_block">
@@ -70,24 +68,15 @@ $result = $_GET['result'] ?? '';
                     <span class="util__item_line">|</span>
                 </li>
             <?php }?>
-            <?php if ($authority == 'M') { ?>
-                <li class="header__util_item">
-                    <a href="usersTable.php">
-                        <span>管理註冊清單</span>
-                    </a>
-                    <span class="util__item_line">|</span>
-                </li>
-            <?php } else { ?>
-                <li class="header__util_item wish-box">
-                    <a href="wishboxPage.php">
-                        <span class="util__item_icon">
-                            <i class="material-icons icon-wish">favorite_border</i>
-                        </span>
-                        <span>願望清單</span>
-                    </a>
-                    <span class="util__item_line">|</span>
-                </li>
-            <?php } ?>
+            <li class="header__util_item wish-box">
+                <a href="wishboxPage.php">
+                    <span class="util__item_icon">
+                        <i class="material-icons icon-wish">favorite_border</i>
+                    </span>
+                    <span>願望清單</span>
+                </a>
+                <span class="util__item_line">|</span>
+            </li>
             <?php if ($user) { ?>
                 <li class="header__util_item login-button">
                     <a href="controllers/logout_process.php">登出</a>
@@ -101,36 +90,22 @@ $result = $_GET['result'] ?? '';
         </header>
 
         <div class="content">
-        <?php if($msg) { ?>
-        <div class="class__modal class__edit">
-            <div class="class__board">
-                <div class="class__board_inner">
-                    <div class="class__board_logo">
-                        <h1 class="class__board_title">Delete</h1>
-                    </div>
-                    <p class="class__board_notice">刪除使用者<?= $result ?></p>
-                    <div class="class__board_block">
-                        <div class="class__form_btn">
-                            <button type="button" class="btn submit__btn">
-                                <a href="usersTable.php">確認</a>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?php } ?>
             <div class="sidebar">
                 <nav class="sidebar__nav" role="navigation">
                     <h2 class="sidebar__title">貼圖選單</h2>
                     <ul class="sidebar__list">
-                    <?php foreach ($stickers as $sticker) { ?>
+                    <?php if(!$stickers) {?>
+                        <li class="sidebar__list_item <?php echo ($sticker->id == $stickerId) ? "selected" : "" ?>">
+                            查無結果
+                        </li> 
+                    <?php } else {
+                        foreach ($stickers as $sticker) { ?>
                         <li class="sidebar__list_item <?php echo ($sticker->id == $stickerId) ? "selected" : "" ?>">
                             <a href="stickerPage.php?sticker=<?= $sticker->id ?>" >
                                 <?= $sticker->title ?> 
                             </a> 
                         </li> 
-                    <?php } ?> 
+                    <?php }} ?> 
                     </ul> 
                 </nav> 
             </div>

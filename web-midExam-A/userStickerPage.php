@@ -8,7 +8,7 @@ $user = findUserById($conn, $id = $_SESSION["userId"] ?? "");
 $userId    = $user["id"] ?? "";
 $account   = $user['account'] ?? "";
 $name      = $user['name'] ?? "";
-$authority = $user['role'] ?? "";
+$credit = $user['credit'] ?? "";
 $wish_list = $user['wish_list'] ?? [];
 
 //未登入則跳回登入頁面
@@ -24,13 +24,10 @@ $stickers = fetchAllStickers($conn);
 //使用者已購買的貼圖清單
 $purchasedStickers = userPurchasedList($conn, $userId);
 //創建使用者願望清單內的貼圖列表
-$purchasedList = [];
-
-foreach ($purchasedStickers as $purchasedStickerId)
-{
-    $purchased = findStickerById($conn, $purchasedStickerId);
-    array_push($purchasedList, $purchased);
-}
+$purchasedList = array_map(function($purchasedStickerId){
+    global $conn;
+    return findStickerById($conn, $purchasedStickerId);
+},$purchasedStickers);
 
 ?>
 
@@ -50,7 +47,6 @@ foreach ($purchasedStickers as $purchasedStickerId)
                     <span class="header__search_block header__search_block--filter">
                         <i class="material-icons icon-filter">filter_list</i>
                         <select class="search__filter_select" name="field">
-                            <option value="author">作者</option>
                             <option value="title">名稱</option>
                         </select>
                     </span>
@@ -69,24 +65,15 @@ foreach ($purchasedStickers as $purchasedStickerId)
                         <span class="util__item_line">|</span>
                     </li>
                 <?php } ?>
-                <?php if ($authority == 'M') { ?>
-                    <li class="header__util_item">
-                        <a href="usersTable.php">
-                            <span>管理註冊清單</span>
-                        </a>
-                        <span class="util__item_line">|</span>
-                    </li>
-                <?php } else { ?>
-                    <li class="header__util_item wish-box">
-                        <a href="#">
-                            <span class="util__item_icon">
-                                <i class="material-icons icon-wish">favorite_border</i>
-                            </span>
-                            <span>願望清單</span>
-                        </a>
-                        <span class="util__item_line">|</span>
-                    </li>
-                <?php } ?>
+                <li class="header__util_item wish-box">
+                    <a href="#">
+                        <span class="util__item_icon">
+                            <i class="material-icons icon-wish">favorite_border</i>
+                        </span>
+                        <span>願望清單</span>
+                    </a>
+                    <span class="util__item_line">|</span>
+                </li>
                 <?php if ($account) { ?>
                     <li class="header__util_item login-button">
                         <a href="controllers/logout_process.php">登出</a>
@@ -169,7 +156,7 @@ foreach ($purchasedStickers as $purchasedStickerId)
                             <div class="section__info_cash">
                                 <h3 class="info__cash_title">我的WEB點數</h3>
                                 <div class="info__cash_credit">
-                                    <p class="cash__credit_price">NT$0</p>
+                                    <p class="cash__credit_price">NT$<?=$credit?></p>
                                     <p class="cash__credit_text">(WEB點數＝目前作業成績/10)</p>
                                 </div>
                             </div>
