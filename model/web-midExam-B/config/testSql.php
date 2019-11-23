@@ -83,10 +83,17 @@ function userWishList($conn, $user_id)
     $stmt->execute();
     $recordList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    //轉換願望清單為貼圖id清單
+    //讀取每筆願望清單內貼圖id 創建願望貼圖id清單
+    $userWish = [];
+    foreach( $recordList as $record )
+    {
+        $userWish[] = $record['sticker_id'];
+    }
+    /*
     $userWish = array_map(function ($record){
         return $record['sticker_id'];
     },$recordList);
+    */
 
     return $userWish;
 }

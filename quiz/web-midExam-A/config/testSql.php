@@ -98,10 +98,12 @@ function userPurchasedList($conn, $user_id)
     $recordList = [];/**存取回傳資料 fetchAll -> 陣列型態資料 */
 
     /**以下勿動 */
-    //轉換購買記錄為貼圖id清單
-    $userPurchase = array_map(function ($record){
-        return $record['sticker_id'];
-    },$recordList);
+    //讀取每筆購買記錄內貼圖id 創建購買貼圖id清單
+    $userPurchase = [];
+    foreach( $recordList as $record )
+    {
+        $userPurchase[] = $record['sticker_id'];
+    }
 
     return $userPurchase;
 }

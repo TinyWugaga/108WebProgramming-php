@@ -59,7 +59,7 @@ $result = $_GET['result'] ?? '';
                             <i class="material-icons icon-search">search</i>
                         </input>
                     </span>
-                    <input class="header__search_input" type="text" name="search" placeholder="搜尋貼圖" value="">
+                    <input class="header__search_input" type="text" name="search" placeholder="搜尋貼圖" value="<?= $search ?>">
                 </form>
             </div>
             <ul class="header__util">

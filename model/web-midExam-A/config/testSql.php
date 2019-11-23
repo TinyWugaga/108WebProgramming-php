@@ -83,10 +83,17 @@ function userPurchasedList($conn, $user_id)
     $stmt->execute();
     $recordList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    //轉換購買記錄為貼圖清單
+     //讀取每筆購買記錄內貼圖id 創建購買貼圖id清單
+    $userPurchase = [];
+    foreach( $recordList as $record )
+    {
+        $userPurchase[] = $record['sticker_id'];
+    }
+    /*
     $userPurchase = array_map(function ($record){
         return $record['sticker_id'];
     },$recordList);
+    */
 
     return $userPurchase;
 }
