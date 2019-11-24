@@ -17,7 +17,7 @@
  * @param  array $seat       要修改的使用者機台
  * @return boolean           執行結果
  */
-function updateUserName($conn, $account, $seat)
+function updateUserSeat($conn, $account, $seat)
 {    
     //$sql= 更新 `users`資料表 `seat`=使用者機台 `updated_at`=CURRENT_TIME() 欄位 在 `account` = 使用者帳號 的條件下
     //prepare($sql);

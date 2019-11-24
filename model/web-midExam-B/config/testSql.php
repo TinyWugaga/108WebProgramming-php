@@ -14,7 +14,7 @@
  * @param  array $seat       要修改的使用者機台
  * @return boolean           執行結果
  */
-function updateUserName($conn, $account, $seat)
+function updateUserSeat($conn, $account, $seat)
 {    
     $stmt = $conn->prepare(
         "UPDATE `users` SET `seat`=:seat, `updated_at`=CURRENT_TIME() WHERE `account`={$account}"

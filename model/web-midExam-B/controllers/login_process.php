@@ -13,7 +13,7 @@ if(!is_numeric($uSeat))
   header("Location:../login.php?msg=" . $msg);
   die;
 }
-$addSeatResult = updateUserName($conn, $uAccount, $uSeat);
+$addSeatResult = updateUserSeat($conn, $uAccount, $uSeat);
 
 //確認 $user非空值
 if ($user)
